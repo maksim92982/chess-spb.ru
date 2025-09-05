@@ -58,15 +58,6 @@
     }
     </script>
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-9JSBLLR18Y');
-    </script>
-    
     <style>
         :root {
             --primary: #2c3e50;
@@ -259,7 +250,7 @@
             </a>
             </p>
             <br>
-            <p>Здесь вы найдете актуальную информацию о детских шахматных турнирах в Санкт-Петербурге. Мы собираем данные со всех клубов и организаторов, чтобы вам было удобно планировать участие в соревнованиях.</p>
+            <p>Здесь вы найдете актуальную информацию о детских шахматных турниры в Санкт-Петербурге. Мы собираем данные со всех клубов и организаторов, чтобы вам было удобно планировать участие в соревнованиях.</p>
         </div>
         
         <div class="month-filter">
@@ -281,7 +272,7 @@
     <script>
         // Данные о турнирах
         const tournaments = [
-            // ИЮЛЬСКИЕ ТУРНИРЫ (уже были в вашем файле + добавлены отсутствующие)
+            // ИЮЛЬСКИЕ ТУРНИРЫ
             {
                 id: 1,
                 name: "Шах и Мат",
@@ -474,7 +465,7 @@
                 month: 7
             },
 
-            // АВГУСТОВСКИЕ ТУРНИРЫ (НОВЫЕ - из вашего сообщения)
+            // АВГУСТОВСКИЕ ТУРНИРЫ
             {
                 id: 14,
                 name: "Мемориал В.Л. Корчного",
@@ -575,69 +566,157 @@
                 link: "https://good-chess.tb.ru",
                 month: 8
             },
-            // СЕНТЯБРЬСКИЕ ТУРНИРЫ
-{
-    id: 21,
-    name: "Перспектива",
-    location: "Кудрово",
-    date: "6 сентября",
-    format: "Рапид 9 туров (10+5)",
-    groups: [
-        "«А1» - 1300 и выше",
-        "«A2» - 1100-1350",
-        "«А3» - 1000-1150, 2010г.р. и младше",
-        "«А4» - 2018 г.р. и моложе"
-    ],
-    fee: "1650-2200₽",
-    link: "https://vk.com/wall-157175360_2586",
-    month: 9
-},
-{
-    id: 22,
-    name: "ШК Сестрорецк",
-    location: "Сестрорецк",
-    date: "7 сентября",
-    format: "Рапид 7 туров 10+5",
-    groups: [
-        "Турнир \"А\" - 2012 гр и моложе, рейтинг до 1700",
-        "Турнир \"В\" - 2016 гр и моложе, рейтинг до 1250 и без рейтинга"
-    ],
-    fee: "1700₽",
-    link: "https://vk.com/wall-119860869_9877",
-    month: 9
-},
-{
-    id: 23,
-    name: "Гатчина",
-    location: "Гатчина",
-    date: "21 сентября",
-    format: "Рапид 9 туров (10+2)",
-    groups: [
-        "Абсолютный зачёт",
-        "Мальчики 2008-2012г.р. и младше",
-        "Мальчики 2013г.р и младше",
-        "Мальчики 2015г.р. и младше",
-        "Мальчики 2017г.р. и младше",
-        "Девочки абсолютный зачет",
-        "Игроки с рейтингом до 1200 пунктов"
-    ],
-    fee: "1000₽",
-    link: "https://vk.com/wall-176841413_3975",
-    month: 9
-},
-{
-    id: 24,
-    name: "На Петроградской стороне",
-    location: "Петроградская сторона",
-    date: "7 сентября",
-    format: "Блиц 11 туров 3+2",
-    groups: [
-        "Все желающие"
-    ],
-    fee: "1000₽",
-    link: "http://totalchess.org/memorial-g.chepukajtisa-2025,-blicz-na-ps.html",
-    month: 9
-}
+
+            // СЕНТЯБРЬСКИЕ ТУРНИРЫ (ОБНОВЛЕННЫЕ)
+            {
+                id: 21,
+                name: "Дебют",
+                location: "Кудрово",
+                date: "6-7 сентября",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "«А1» - 1300 и выше",
+                    "«A2» - 1100-1350",
+                    "«А3» - 1000-1150, 2010г.р. и младше",
+                    "«А4» - 2018 г.р. и моложе"
+                ],
+                fee: "1650-2200₽",
+                link: "https://vk.com/wall-157175360_2586",
+                month: 9
+            },
+            {
+                id: 22,
+                name: "Дебют (Блиц)",
+                location: "Кудрово",
+                date: "6-7 сентября",
+                format: "Блиц 11 туров (3+2)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "0-1600₽",
+                link: "https://vk.com/wall-155462541_770",
+                month: 9
+            },
+            {
+                id: 23,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "7 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Турнир \"А\" - 2012 гр и моложе, рейтинг до 1700",
+                    "Турнир \"В\" - 2016 гр и моложе, рейтинг до 1250 и без рейтинга"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9877",
+                month: 9
+            },
+            {
+                id: 24,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "21 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Информация уточняется"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9882",
+                month: 9
+            },
+            {
+                id: 25,
+                name: "Гатчина",
+                location: "Гатчина",
+                date: "21 сентября",
+                format: "Рапид 9 туров (10+2)",
+                groups: [
+                    "Абсолютный зачёт",
+                    "Мальчики 2008-2012г.р. и младше",
+                    "Мальчики 2013г.р и младше",
+                    "Мальчики 2015г.р. и младше",
+                    "Мальчики 2017г.р. и младше",
+                    "Девочки абсолютный зачет",
+                    "Игроки с рейтингом до 1200 пунктов"
+                ],
+                fee: "1000₽",
+                link: "https://vk.com/wall-176841413_3975",
+                month: 9
+            },
+            {
+                id: 26,
+                name: "На Петроградской стороне",
+                location: "Петроградская сторона",
+                date: "7 сентября",
+                format: "Блиц 11 туров (3+2)",
+                groups: [
+                    "Все желающие"
+                ],
+                fee: "1000₽",
+                link: "http://totalchess.org/memorial-g.chepukajtisa-2025,-blicz-na-ps.html",
+                month: 9
+            },
+            {
+                id: 27,
+                name: "Good Chess",
+                location: "Лодыгина 5",
+                date: "13-14 сентября",
+                format: "Рапид",
+                groups: [
+                    "А1. 2015-2020 г. р., рейтинг до 1250",
+                    "А2. Рейтинг 1250+ без ограничений по возрасту",
+                    "А3. до 1500 без ограничений по возрасту",
+                    "А4. OPEN без ограничений",
+                    "А5. 2017 г.р. и младше без ограничений по рейтингу",
+                    "А6. 2011 г.р. и младше без ограничений по рейтингу"
+                ],
+                fee: "2000-2400₽",
+                link: "https://vk.com/wall-165232463_2466",
+                month: 9
+            },
+            {
+                id: 28,
+                name: "Василеостровская ШШ",
+                location: "Морская 15",
+                date: "6 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "Бесплатно",
+                link: "https://vk.com/wall-55891840_8526",
+                month: 9
+            },
+            {
+                id: 29,
+                name: "IQ Cup",
+                location: "Всеволожск",
+                date: "6 сентября",
+                format: "Блиц 7 туров (3+2)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "Бесплатно",
+                link: "https://vk.com/wall-210773312_721",
+                month: 9
+            },
+            {
+                id: 30,
+                name: "Медный всадник",
+                location: "Саперный пер. 10",
+                date: "13-14 сентября",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "2010-2011 г.р.",
+                    "2012-2013 г.р.",
+                    "2014-2015 г.р.",
+                    "2016-2017 г.р.",
+                    "2018 г.р. и младше"
+                ],
+                fee: "2000₽",
+                link: "https://clubvsadnik.ru/rapid_autumn_2025",
+                month: 9
+            }
         ];
 
         // Функция для отображения турниров
@@ -686,49 +765,48 @@
         }
         
         // Инициализация при загрузке страницы
-        // Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    // Определяем текущий месяц (1-12)
-    const currentMonth = new Date().getMonth() + 1;
-    
-    // Определяем, какой месяц показывать по умолчанию
-    let defaultMonth = 'all';
-    
-    // Если есть турниры за текущий месяц - показываем его
-    if (tournaments.some(t => t.month === currentMonth)) {
-        defaultMonth = currentMonth;
-    } 
-    // Если текущий месяц уже прошел, показываем следующий
-    else if (tournaments.some(t => t.month > currentMonth)) {
-        // Находим ближайший будущий месяц с турнирами
-        const futureMonths = tournaments.filter(t => t.month > currentMonth);
-        if (futureMonths.length > 0) {
-            defaultMonth = Math.min(...futureMonths.map(t => t.month));
-        }
-    }
-    
-    // Активируем соответствующую кнопку
-    const monthButtons = document.querySelectorAll('.month-btn');
-    monthButtons.forEach(button => {
-        if (button.dataset.month === defaultMonth.toString()) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
-    
-    // Показываем турниры для выбранного месяца
-    displayTournaments(defaultMonth);
-    
-    // Обработчики для кнопок фильтрации
-    monthButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            monthButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            displayTournaments(button.dataset.month);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Определяем текущий месяц (1-12)
+            const currentMonth = new Date().getMonth() + 1;
+            
+            // Определяем, какой месяц показывать по умолчанию
+            let defaultMonth = 'all';
+            
+            // Если есть турниры за текущий месяц - показываем его
+            if (tournaments.some(t => t.month === currentMonth)) {
+                defaultMonth = currentMonth;
+            } 
+            // Если текущий месяц уже прошел, показываем следующий
+            else if (tournaments.some(t => t.month > currentMonth)) {
+                // Находим ближайший будущий месяц с турнирами
+                const futureMonths = tournaments.filter(t => t.month > currentMonth);
+                if (futureMonths.length > 0) {
+                    defaultMonth = Math.min(...futureMonths.map(t => t.month));
+                }
+            }
+            
+            // Активируем соответствующую кнопку
+            const monthButtons = document.querySelectorAll('.month-btn');
+            monthButtons.forEach(button => {
+                if (button.dataset.month === defaultMonth.toString()) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Показываем турниры для выбранного месяца
+            displayTournaments(defaultMonth);
+            
+            // Обработчики для кнопок фильтрации
+            monthButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    monthButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    displayTournaments(button.dataset.month);
+                });
+            });
         });
-    });
-});
     </script>
 </body>
 </html>
