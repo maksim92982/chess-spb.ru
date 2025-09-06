@@ -1,790 +1,812 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9JSBLLR18Y');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JANART STUDIO</title>
+    
+    <!-- Подтверждение прав для Google Search Console -->
+    <meta name="google-site-verification" content="JmK153xWDEDha8CdndCO87cB6RmqpSr3l479tJlFPO4" />
+    
+    <!-- Основные SEO-теги -->
+    <title>Детские шахматные турниры в Санкт-Петербурге 2025 | Расписание и регистрация</title>
+    <meta name="description" content="Полное расписание детских шахматных турниров в СПб на 2025 год. Даты, места проведения, возрастные группы и условия участия. Регистрируйтесь онлайн!">
+    <meta name="keywords" content="шахматы для детей, турниры по шахматам СПб, шахматные соревнования 2025, детские шахматы Санкт-Петербург">
+    
+    <!-- OpenGraph для соцсетей -->
+    <meta property="og:title" content="Детские шахматные турниры в Санкт-Петербурге">
+    <meta property="og:description" content="Актуальное расписание турниров по шахматам для детей в СПб">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.chess-spb.ru/">
+    <meta property="og:image" content="https://www.chess-spb.ru/logo.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    
+    <!-- Каноническая ссылка -->
+    <link rel="canonical" href="https://www.chess-spb.ru/">
+    
+    <!-- Mobile optimization -->
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Schema.org разметка -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Детские шахматные турниры СПб",
+      "url": "https://www.chess-spb.ru/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.chess-spb.ru/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
     <style>
-        /* Общие стили */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            color: #000;
+            background-color: #f5f5f5;
+            color: #333;
             line-height: 1.6;
-            background-color: #fff;
         }
         
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        /* Шапка */
         header {
-            padding: 30px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.95);
-            transition: padding 0.3s ease;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-family: 'Italiana', serif;
-            cursor: pointer;
-        }
-        
-        .logo:hover {
-            opacity: 0.7;
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 40px;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        nav ul li a:hover {
-            opacity: 0.7;
-        }
-        
-        /* Мобильное меню */
-        .mobile-menu {
-            display: none;
-            cursor: pointer;
-        }
-        
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transform: translateY(-100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .mobile-nav.active {
-            transform: translateY(0);
-        }
-        
-        .close-menu {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        
-        /* Главная страница */
-        .main-content {
-            margin-top: 120px;
-            padding: 0 60px;
-        }
-        
-        .hero-image {
-            width: 100%;
-            height: 70vh;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .hero-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        
-        /* Галерея */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 120px;
-            padding: 0 60px;
-        }
-        
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            height: 50vh;
-            width: 100%;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.03);
-        }
-        
-        .gallery-item-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 15px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .gallery-item:hover .gallery-item-overlay {
-            opacity: 1;
-        }
-        
-        .product-title {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .product-price {
-            font-size: 14px;
-        }
-        
-        .sold-out {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #000;
-            color: #fff;
-            padding: 5px 10px;
-            font-size: 12px;
-        }
-        
-        /* Страница товара */
-        .product-page {
-            display: none;
-            padding: 120px 60px 60px;
-        }
-        
-        .product-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: center;
-        }
-        
-        .product-gallery {
-            flex: 1;
-            min-width: 300px;
-            max-width: 75%;
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        
-        .product-thumbnails {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 80px;
-        }
-        
-        .product-thumbnail {
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .product-thumbnail:hover,
-        .product-thumbnail.active {
-            opacity: 1;
-            border-color: #000;
-        }
-        
-        .product-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .product-image-main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            max-height: 65vh;
-        }
-        
-        .product-image-main img {
-            max-width: 100%;
-            max-height: 65vh;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-        
-        .product-details {
-            flex: 1;
-            min-width: 300px;
-            max-width: 400px;
-        }
-        
-        .back-button {
-            display: inline-block;
-            margin-bottom: 30px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        
-        .back-button:hover {
-            opacity: 0.7;
-        }
-        
-        .add-to-cart {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 15px 30px;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .add-to-cart:hover {
-            background: #333;
-        }
-        
-        /* Биография */
-        .bio-page {
-            display: none;
-            padding: 120px 60px 60px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .bio-page h1 {
-            margin-bottom: 30px;
-            font-size: 32px;
-        }
-        
-        .bio-page p {
-            margin-bottom: 20px;
-            font-size: 18px;
-            line-height: 1.8;
-        }
-        
-        /* Контакты */
-        .contact-page {
-            display: none;
-            padding: 120px 60px 60px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .contact-page h1 {
-            margin-bottom: 30px;
-            font-size: 32px;
-        }
-        
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 16px;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-        }
-        
-        .form-group textarea {
-            min-height: 150px;
-        }
-        
-        .submit-button {
-            background: #000;
-            color: #fff;
-            border: none;
-            padding: 15px 30px;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            align-self: flex-start;
-        }
-        
-        .submit-button:hover {
-            background: #333;
-        }
-        
-        /* Футер */
-        footer {
-            padding: 60px;
-            background: #f7f7f7;
-            margin-top: 60px;
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem 0;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        .social-links {
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .intro {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tournament-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .tournament-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tournament-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            background-color: var(--secondary);
+            color: white;
+            padding: 1rem;
+        }
+        
+        .card-header h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .tournament-info {
+            margin-bottom: 1rem;
+        }
+        
+        .tournament-info p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        
+        .month-filter {
             display: flex;
             justify-content: center;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
-            gap: 30px;
+            gap: 0.5rem;
         }
         
-        .social-links a {
-            font-size: 18px;
-            padding: 12px 20px;
-            transition: opacity 0.3s ease;
+        .month-btn {
+            background-color: white;
+            border: 1px solid var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .social-links a:hover {
-            opacity: 0.7;
+        .month-btn.active {
+            background-color: var(--secondary);
+            color: white;
         }
         
-        /* Адаптивность */
-        @media (max-width: 1024px) {
-            .gallery {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .gallery-item {
-                height: 40vh;
-            }
-            
-            .product-gallery {
-                max-width: 85%;
-            }
+        .month-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .no-tournaments {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            grid-column: 1 / -1;
         }
         
         @media (max-width: 768px) {
-            header {
-                padding: 20px;
-            }
-            
-            nav ul {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: block;
-            }
-            
-            .main-content,
-            .gallery,
-            .product-page,
-            .bio-page,
-            .contact-page {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-            
-            .hero-image {
-                height: 50vh;
-            }
-            
-            .gallery {
+            .tournament-list {
                 grid-template-columns: 1fr;
-                gap: 15px;
             }
             
-            .gallery-item {
-                height: 35vh;
-            }
-            
-            .product-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .product-gallery {
-                flex-direction: column;
-                max-width: 100%;
-                min-width: unset;
-            }
-            
-            .product-thumbnails {
-                flex-direction: row;
-                flex-wrap: wrap;
-                width: 100%;
-                justify-content: center;
-                order: 2;
-            }
-            
-            .product-image-main {
-                order: 1;
-                max-height: 55vh;
-            }
-            
-            .product-image-main img {
-                max-height: 55vh;
-            }
-            
-            .product-details {
-                max-width: 100%;
-            }
-            
-            .product-thumbnail {
-                width: 60px;
-                height: 60px;
-            }
-            
-            .social-links {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .social-links a {
-                font-size: 16px;
-                padding: 10px 15px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .gallery-item {
-                height: 30vh;
-            }
-            
-            .product-image-main {
-                max-height: 50vh;
-            }
-            
-            .product-image-main img {
-                max-height: 50vh;
-            }
-            
-            .product-thumbnail {
-                width: 50px;
-                height: 50px;
+            h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Шапка -->
     <header>
-        <div class="logo" id="home-logo">JANART STUDIO</div>
-        <nav>
-            <ul>
-                <li><a href="#" class="nav-link" data-page="gallery">Галерея</a></li>
-                <li><a href="#" class="nav-link" data-page="bio">Об авторе</a></li>
-                <li><a href="#" class="nav-link" data-page="contact">Контакты</a></li>
-            </ul>
-        </nav>
-        <div class="mobile-menu">Меню</div>
+        <div class="header-content">
+            <h1>Детские шахматные турниры</h1>
+            <p class="subtitle">Санкт-Петербург | Информация о турнирах для детей</p>
+        </div>
     </header>
-
-    <!-- Мобильное меню (добавлено в HTML) -->
-    <div class="mobile-nav">
-        <div class="close-menu">✕</div>
-        <ul>
-            <li><a href="#" class="nav-link" data-page="home">Главная</a></li>
-            <li><a href="#" class="nav-link" data-page="gallery">Галерея</a></li>
-            <li><a href="#" class="nav-link" data-page="bio">Об авторе</a></li>
-            <li><a href="#" class="nav-link" data-page="contact">Контакты</a></li>
-        </ul>
-    </div>
-
-    <!-- Главная страница -->
-    <div id="home-page" class="page">
-        <div class="main-content">
-            <div class="hero-image">
-                <img src="images/freepik-export-20241021134528sZDq.jpeg" alt="Главное изображение JANART STUDIO" id="main-hero">
-            </div>
+    
+    <div class="container">
+        <div class="intro">
+            <h2>Добро пожаловать на наш шахматный портал!</h2><br>
+            <p>Вступай в нашу группу в Телеграм
+            <a href="https://t.me/chesskidsspb" target="_blank" style="color: #3498db; font-weight: bold; text-decoration: none;">
+            <span style="font-size:1.2em;">📢</span> ЗДЕСЬ
+            </a>
+            </p>
+            <br>
+            <p>Здесь вы найдете актуальную информацию о детских шахматных турниры в Санкт-Петербурге. Мы собираем данные со всех клубов и организаторов, чтобы вам было удобно планировать участие в соревнованиях.</p>
+        </div>
+        
+        <div class="month-filter">
+            <button class="month-btn" data-month="all">Все турниры</button>
+            <button class="month-btn" data-month="7">Июль</button>
+            <button class="month-btn" data-month="8">Август</button>
+            <button class="month-btn" data-month="9">Сентябрь</button>
+         </div>
+        
+        <div class="tournament-list" id="tournamentContainer">
+            <!-- Турниры будут добавляться через JavaScript -->
         </div>
     </div>
-
-    <!-- Галерея -->
-    <div id="gallery-page" class="page" style="display: none;">
-        <div class="gallery">
-            <!-- Элементы галереи будут добавлены через JavaScript -->
-        </div>
-    </div>
-
-    <!-- Страница товара -->
-    <div id="product-page" class="product-page">
-        <!-- Контент будет добавляться через JavaScript -->
-    </div>
-
-    <!-- Биография -->
-    <div id="bio-page" class="bio-page">
-        <h1>Об авторе</h1>
-        <p>Я - современный художник, вдохновленный красотой окружающего мира и внутренними переживаниями. Мои работы отражают взаимодействие цвета, формы и текстуры, создавая уникальные визуальные narratives.</p>
-        <p>Я работаю с различными медиа, включая акрил, масло и смешанную технику. Каждая картина - это исследование и выражение эмоций, зафиксированных на холсте.</p>
-        <p>Мое искусство - это диалог со зрителем, приглашение к размышлению и эмоциональному отклику. Я стремлюсь создавать работы, которые resonate с людьми на глубоком уровне.</p>
-        <p>Мои произведения находятся в частных коллекциях по всему миру и были представлены на нескольких выставках.</p>
-    </div>
-
-    <!-- Контакты -->
-    <div id="contact-page" class="contact-page">
-        <h1>Свяжитесь со мной</h1>
-        <form class="contact-form">
-            <div class="form-group">
-                <label for="name">Имя</label>
-                <input type="text" id="name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
-            </div>
-            <div class="form-group">
-                <label for="message">Сообщение</label>
-                <textarea id="message" required></textarea>
-            </div>
-            <button type="submit" class="submit-button">Отправить</button>
-        </form>
-    </div>
-
-    <!-- Футер -->
+    
     <footer>
-        <div class="social-links">
-            <a href="https://wa.me/79046006365" target="_blank">WhatsApp</a>
-            <a href="https://www.instagram.com/" target="_blank">Instagram</a>
-        </div>
+        <p>© 2025 Детские шахматные турниры СПб | Информация обновляется по мере публикации</p>
     </footer>
 
     <script>
-        // КОНФИГУРАЦИЯ: укажите здесь количество картин в галерее. количество фоток
-        const numberOfPaintings = 3;
-        
-        // Количество фотографий для каждой картины
-        const photosPerPainting = 6;
-        
-        // Переменные для управления панелью миниатюр
-        let currentProduct = null;
-        
-        // Автоматическое создание данных для галереи
-        const galleryItems = Array.from({length: numberOfPaintings}, (_, i) => {
-            const paintingNumber = i + 1;
-            
-            const images = Array.from({length: photosPerPainting}, (_, j) => {
-                const photoNumber = j + 1;
-                return `images/gallery/${paintingNumber}/${photoNumber}.JPG`;
-            });
-            
-            return {
-                id: paintingNumber,
-                title: `Без названия, №${paintingNumber}`,
-                size: paintingNumber % 2 === 0 ? '36" x 48"' : '48" x 36"',
-                price: paintingNumber === 5 ? "2 160 ₽" : "3 450 ₽",
-                mainImage: images[0],
-                images: images,
-                soldOut: paintingNumber === 1,
-                description: "Акрил, мраморная пыль и пигмент на холсте, 2024"
-            };
-        });
+        // Данные о турнирах
+        const tournaments = [
+            // ИЮЛЬСКИЕ ТУРНИРЫ
+            {
+                id: 1,
+                name: "Шах и Мат",
+                location: "Светлановский",
+                date: "4 июля",
+                format: "Рапид 9 туров, 10+3",
+                groups: [
+                    "Группа А - 2016 г.р. и младше, рейтинг до 1200",
+                    "Группа Б - 2013 г.р. и младше, рейтинг до 1400"
+                ],
+                fee: "1600₽",
+                link: "https://vk.com/wall-199387001_1637",
+                month: 7
+            },
+            {
+                id: 2,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "5 июля",
+                format: "Рапид 7 туров, 10+5",
+                groups: [
+                    "Группа «А»: 2015 гр и старше, рейтинг до 1800",
+                    "Группа «В»: 2016 гр и моложе без ограничения рейтинга"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9711",
+                month: 7
+            },
+            {
+                id: 3,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "20 июля",
+                format: "Рапид 7 туров, 10+5",
+                groups: [
+                    "Участники 2010 г.р. и младше"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9720",
+                month: 7
+            },
+            {
+                id: 4,
+                name: "На петроградской стороне",
+                location: "Петроградская сторона",
+                date: "21-25, 28-31 июля",
+                format: "Классика 9 туров (90+30)",
+                groups: [
+                    "Турнир без ограничений возраста и рейтинга"
+                ],
+                fee: "от 3500₽",
+                link: "http://totalchess.org/leto-na-petrogradskoj-storone-2025.html",
+                month: 7
+            },
+            {
+                id: 5,
+                name: "Охта парк Chess",
+                location: "Охта парк",
+                date: "27-29 июля",
+                format: "Рапид 7 туров (10+5) / Классика / Блиц",
+                groups: [
+                    "Рапид: взнос 1900₽",
+                    "Классика (В1,В2 7 туров (60+30), В3,В4 7 туров (30+30)): взнос 3500₽",
+                    "Блиц 11 туров (3+2): взнос 1500₽",
+                    "Разные категории по рейтингу и возрасту"
+                ],
+                fee: "от 1500₽",
+                link: "https://vk.com/wall-157175360_2500",
+                month: 7
+            },
+            {
+                id: 6,
+                name: "T-Chess",
+                location: "",
+                date: "26-29 июля",
+                format: "Классика и Рапид",
+                groups: [
+                    "Классика 7 туров (90+30)",
+                    "К1-OPEN без ограничений по возрасту и рейтингу",
+                    "К2 - 2015 года и младше",
+                    "К3 - девочки 2015 года и младше",
+                    "К4 - 2017 год рождения и младше",
+                    "К5 - девочки 2017 года и мл",
+                    "Рапид 7 туров (10+5)",
+                    "Р1 - OPEN без ограничений по возрасту и рейтингу",
+                    "Р2 - до 1250 пунктов, без ограничений по возрасту"
+                ],
+                fee: "",
+                link: "https://vk.com/wall-80045880_5078",
+                month: 7
+            },
+            {
+                id: 7,
+                name: "GoodChess",
+                location: "Ул.Достоевского",
+                date: "6 июля",
+                format: "Рапид и Блиц",
+                groups: [
+                    "Рапид: участники дети 0-1300",
+                    "Блиц: без ограничений"
+                ],
+                fee: "2000₽ (Рапид), 1000₽ (Блиц)",
+                link: "https://vk.com/wall-165232463_2390",
+                month: 7
+            },
+            {
+                id: 8,
+                name: "GoodChess",
+                location: "Ул.Достоевского и Кожевенная линия",
+                date: "18-19 июля",
+                format: "Рапид и Блиц",
+                groups: [
+                    "Рапид: Детский, Опен, Семейный",
+                    "Блиц: Опен",
+                    "Для разного рейтинга и возраста"
+                ],
+                fee: "от 1000₽",
+                link: "https://good-chess.tb.ru",
+                month: 7
+            },
+            {
+                id: 9,
+                name: "GoodChess",
+                location: "Ул. Достоевского",
+                date: "24-27 июля",
+                format: "Классика",
+                groups: [
+                    "А1. Детский турнир для участников 2016 года и младше (0-1150)",
+                    "А2. Детский турнир для участников 2013 года и младше (0-1400)",
+                    "А3. Общий турнир без ограничений"
+                ],
+                fee: "",
+                link: "https://vk.com/wall-165232463_2406",
+                month: 7
+            },
+            {
+                id: 10,
+                name: "ChessChamp",
+                location: "пл.Мужества",
+                date: "13 июля",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "до 1700",
+                    "до 1300 пунктов рейтинга"
+                ],
+                fee: "1500₽",
+                link: "https://vk.com/wall-221087744_3102",
+                month: 7
+            },
+            {
+                id: 11,
+                name: "ChessChamp",
+                location: "пл.Мужества",
+                date: "27 июля",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "до 2000",
+                    "до 1500 пунктов рейтинга"
+                ],
+                fee: "1500₽",
+                link: "https://vk.com/wall-221087744_3102",
+                month: 7
+            },
+            {
+                id: 12,
+                name: "Медный всадник",
+                location: "ТРЦ Галерея",
+                date: "20 июля",
+                format: "Блиц 9 туров (3+2)",
+                groups: [
+                    "Участники 2007 г.р. и моложе: 500₽",
+                    "Остальные: 1000₽"
+                ],
+                fee: "500-1000₽",
+                link: "https://clubvsadnik.ru/internationalchessday",
+                month: 7
+            },
+            {
+                id: 13,
+                name: "Grand-Open in GALERIA",
+                location: "ТРЦ Галерея",
+                date: "21-27 июля",
+                format: "Классика 7 туров (90+30)",
+                groups: [
+                    "Рейтинг от 1800 (мужчины)",
+                    "Для девушек от 1700"
+                ],
+                fee: "Бесплатно",
+                link: "http://totalchess.org/klassika-grand-open,-1-j-etap.html",
+                month: 7
+            },
 
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            initGallery();
-            initNavigation();
-            initForms();
-            
-            document.getElementById('main-hero').addEventListener('click', function() {
-                showPage('gallery');
-            });
-            
-            // Обработчик клика по логотипу
-            document.getElementById('home-logo').addEventListener('click', function() {
-                showPage('home');
-            });
-        });
+            // АВГУСТОВСКИЕ ТУРНИРЫ
+            {
+                id: 14,
+                name: "Мемориал В.Л. Корчного",
+                location: "Азимут Отель",
+                date: "22-28 августа",
+                format: "Классика 9 туров 90+30",
+                groups: [
+                    "Турнир А: рейтинг от 1800 (м), от 1700 (ж) - 7000₽",
+                    "Турнир В: рейтинг до 2000 - 3500-5000₽",
+                    "Турнир C: детский до 9,11 лет (60+30), до 13,15 лет (90+30) - 3000₽"
+                ],
+                fee: "3000-7000₽",
+                link: "https://spbchesstournaments.com/memorialyi/peterburgleto/informacziya-2025.html",
+                month: 8
+            },
+            {
+                id: 15,
+                name: "Мемориал В.Л. Корчного - Гранд При по Рапиду",
+                location: "Азимут Отель",
+                date: "30-31 августа",
+                format: "Рапид 11 туров 15+10",
+                groups: [
+                    "От 1400 для мужчин, от 1300 для женщин"
+                ],
+                fee: "1000-2000₽",
+                link: "https://spbchesstournaments.com/memorialyi/peterburgleto/informacziya-2025.html",
+                month: 8
+            },
+            {
+                id: 16,
+                name: "Мемориал В.Л. Корчного - Дополнительные турниры",
+                location: "Азимут Отель",
+                date: "29-30 августа",
+                format: "Разные форматы",
+                groups: [
+                    "29 августа: Конкурс решения задач - 500₽",
+                    "29 августа: Шахматы Фишера 7 туров (10+3) - 1000₽",
+                    "29 августа: Блиц 11 туров (3+2) - 1000-1500₽",
+                    "30 августа: Детский рапид 9 туров (10+5) - 2000₽"
+                ],
+                fee: "500-2000₽",
+                link: "https://spbchesstournaments.com/memorialyi/peterburgleto/informacziya-2025.html",
+                month: 8
+            },
+            {
+                id: 17,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "10 августа",
+                format: "Рапид 7 туров 10+5",
+                groups: [
+                    "2012-2020 г.р."
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9778",
+                month: 8
+            },
+            {
+                id: 18,
+                name: "T-Chess",
+                location: "Полюстрово",
+                date: "17 августа",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "Разные группы по рейтингу"
+                ],
+                fee: "1000-2500₽",
+                link: "https://vk.com/wall-80045880_5087",
+                month: 8
+            },
+            {
+                id: 19,
+                name: "Шах и мат",
+                location: "Светлановский",
+                date: "8 августа",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "Группа А - 2015 г.р. и младше, рейтинг до 1200",
+                    "Группа Б - 2010 г.р. и младше, рейтинг до 1550"
+                ],
+                fee: "1600₽",
+                link: "https://vk.com/wall-199387001_1645",
+                month: 8
+            },
+            {
+                id: 20,
+                name: "Good Chess",
+                location: "Усадьба Державина",
+                date: "24 августа",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "2017 г.р. и младше",
+                    "2011 г.р. и младше",
+                    "2014 г.р. и младше (рейтинг ФШР до 1300)",
+                    "Общий рапид (без ограничений)"
+                ],
+                fee: "2000-2400₽",
+                link: "https://good-chess.tb.ru",
+                month: 8
+            },
 
-        // Инициализация галереи
-        function initGallery() {
-            const galleryContainer = document.querySelector('.gallery');
+            // СЕНТЯБРЬСКИЕ ТУРНИРЫ (ОБНОВЛЕННЫЕ)
+            {
+                id: 21,
+                name: "Дебют",
+                location: "Кудрово",
+                date: "6-7 сентября",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "«А1» - 1300 и выше",
+                    "«A2» - 1100-1350",
+                    "«А3» - 1000-1150, 2010г.р. и младше",
+                    "«А4» - 2018 г.р. и моложе"
+                ],
+                fee: "1650-2200₽",
+                link: "https://vk.com/wall-157175360_2586",
+                month: 9
+            },
+            {
+                id: 22,
+                name: "Дебют (Блиц)",
+                location: "Кудрово",
+                date: "6-7 сентября",
+                format: "Блиц 11 туров (3+2)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "0-1600₽",
+                link: "https://vk.com/wall-155462541_770",
+                month: 9
+            },
+            {
+                id: 23,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "7 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Турнир \"А\" - 2012 гр и моложе, рейтинг до 1700",
+                    "Турнир \"В\" - 2016 гр и моложе, рейтинг до 1250 и без рейтинга"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9877",
+                month: 9
+            },
+            {
+                id: 24,
+                name: "ШК Сестрорецк",
+                location: "Сестрорецк",
+                date: "21 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Информация уточняется"
+                ],
+                fee: "1700₽",
+                link: "https://vk.com/wall-119860869_9882",
+                month: 9
+            },
+            {
+                id: 25,
+                name: "Гатчина",
+                location: "Гатчина",
+                date: "21 сентября",
+                format: "Рапид 9 туров (10+2)",
+                groups: [
+                    "Абсолютный зачёт",
+                    "Мальчики 2008-2012г.р. и младше",
+                    "Мальчики 2013г.р и младше",
+                    "Мальчики 2015г.р. и младше",
+                    "Мальчики 2017г.р. и младше",
+                    "Девочки абсолютный зачет",
+                    "Игроки с рейтингом до 1200 пунктов"
+                ],
+                fee: "1000₽",
+                link: "https://vk.com/wall-176841413_3975",
+                month: 9
+            },
+            {
+                id: 26,
+                name: "На Петроградской стороне",
+                location: "Петроградская сторона",
+                date: "7 сентября",
+                format: "Блиц 11 туров (3+2)",
+                groups: [
+                    "Все желающие"
+                ],
+                fee: "1000₽",
+                link: "http://totalchess.org/memorial-g.chepukajtisa-2025,-blicz-na-ps.html",
+                month: 9
+            },
+            {
+                id: 27,
+                name: "Good Chess",
+                location: "Лодыгина 5",
+                date: "13-14 сентября",
+                format: "Рапид",
+                groups: [
+                    "А1. 2015-2020 г. р., рейтинг до 1250",
+                    "А2. Рейтинг 1250+ без ограничений по возрасту",
+                    "А3. до 1500 без ограничений по возрасту",
+                    "А4. OPEN без ограничений",
+                    "А5. 2017 г.р. и младше без ограничений по рейтингу",
+                    "А6. 2011 г.р. и младше без ограничений по рейтингу"
+                ],
+                fee: "2000-2400₽",
+                link: "https://vk.com/wall-165232463_2466",
+                month: 9
+            },
+            {
+                id: 28,
+                name: "Василеостровская ШШ",
+                location: "Морская 15",
+                date: "6 сентября",
+                format: "Рапид 7 туров (10+5)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "Бесплатно",
+                link: "https://vk.com/wall-55891840_8526",
+                month: 9
+            },
+            {
+                id: 29,
+                name: "IQ Cup",
+                location: "Всеволожск",
+                date: "6 сентября",
+                format: "Блиц 7 туров (3+2)",
+                groups: [
+                    "Разные группы"
+                ],
+                fee: "Бесплатно",
+                link: "https://vk.com/wall-210773312_721",
+                month: 9
+            },
+            {
+                id: 30,
+                name: "Медный всадник",
+                location: "Саперный пер. 10",
+                date: "13-14 сентября",
+                format: "Рапид 9 туров (10+5)",
+                groups: [
+                    "2010-2011 г.р.",
+                    "2012-2013 г.р.",
+                    "2014-2015 г.р.",
+                    "2016-2017 г.р.",
+                    "2018 г.р. и младше"
+                ],
+                fee: "2000₽",
+                link: "https://clubvsadnik.ru/rapid_autumn_2025",
+                month: 9
+            }
+        ];
+
+        // Функция для отображения турниров
+        function displayTournaments(month = 'all') {
+            const container = document.getElementById('tournamentContainer');
+            container.innerHTML = '';
             
-            galleryItems.forEach(item => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                galleryItem.innerHTML = `
-                    <img src="${item.mainImage}" alt="${item.title}">
-                    <div class="gallery-item-overlay">
-                        <div class="product-title">${item.title}</div>
-                        <div class="product-price">${item.price}</div>
+            let filteredTournaments = tournaments;
+            if (month !== 'all') {
+                filteredTournaments = tournaments.filter(t => t.month === parseInt(month));
+            }
+            
+            if (filteredTournaments.length === 0) {
+                container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
+                return;
+            }
+            
+            filteredTournaments.forEach(tournament => {
+                const card = document.createElement('div');
+                card.className = 'tournament-card';
+                
+                let groupsHTML = '';
+                tournament.groups.forEach(group => {
+                    groupsHTML += `<p>• ${group}</p>`;
+                });
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3>${tournament.name}</h3>
+                        <p>${tournament.location}</p>
                     </div>
-                    ${item.soldOut ? '<div class="sold-out">Продано</div>' : ''}
+                    <div class="card-body">
+                        <div class="tournament-info">
+                            <p><span class="info-label">Дата:</span> ${tournament.date}</p>
+                            <p><span class="info-label">Формат:</span> ${tournament.format}</p>
+                            <p><span class="info-label">Группы:</span></p>
+                            ${groupsHTML}
+                            <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
+                        </div>
+                        <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
+                    </div>
                 `;
                 
-                galleryItem.addEventListener('click', function() {
-                    showProduct(item);
-                });
-                
-                galleryContainer.appendChild(galleryItem);
+                container.appendChild(card);
             });
         }
-
-        // Инициализация навигации
-        function initNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const page = this.getAttribute('data-page');
-                    showPage(page);
-                });
-            });
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            // Определяем текущий месяц (1-12)
+            const currentMonth = new Date().getMonth() + 1;
             
-            // Мобильное меню
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const mobileNav = document.querySelector('.mobile-nav');
-            const closeMenu = document.querySelector('.close-menu');
+            // Определяем, какой месяц показывать по умолчанию
+            let defaultMonth = 'all';
             
-            if (mobileMenu && mobileNav && closeMenu) {
-                mobileMenu.addEventListener('click', function() {
-                    mobileNav.classList.add('active');
-                });
-                
-                closeMenu.addEventListener('click', function() {
-                    mobileNav.classList.remove('active');
-                });
-                
-                const mobileNavLinks = document.querySelectorAll('.mobile-nav .nav-link');
-                mobileNavLinks.forEach(link => {
-                    link.addEventListener('click', function() {
-                        mobileNav.classList.remove('active');
-                    });
-                });
-            }
-        }
-
-        // Инициализация форм
-        function initForms() {
-            const contactForm = document.querySelector('.contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    alert('Сообщение отправлено! Я свяжусь с вами в ближайшее время.');
-                    contactForm.reset();
-                });
-            }
-        }
-
-        // Показать страницу
-        function showPage(pageId) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => {
-                page.style.display = 'none';
-            });
-            
-            document.getElementById(`${pageId}-page`).style.display = 'block';
-            window.scrollTo(0, 0);
-        }
-
-        // Показать страницу товара
-        function showProduct(product) {
-            currentProduct = product;
-            const productPage = document.getElementById('product-page');
-            
-            productPage.innerHTML = `
-                <div class="back-button" id="back-to-gallery">← Назад в галерею</div>
-                <div class="product-container">
-                    <div class="product-gallery">
-                        <div class="product-thumbnails" id="thumbnailsContainer">
-                            ${product.images.map((image, index) => `
-                                <div class="product-thumbnail ${index === 0 ? 'active' : ''}" data-image="${image}">
-                                    <img src="${image}" alt="Миниатюра ${index + 1}">
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="product-image-main">
-                            <img src="${product.images[0]}" alt="${product.title}" id="main-product-image">
-                        </div>
-                    </div>
-                    <div class="product-details">
-                        <h1 class="product-title">${product.title}</h1>
-                        <div class="product-price">${product.price}</div>
-                        <div class="product-size">${product.size}</div>
-                        <div class="product-description">
-                            <p>${product.description}</p>
-                            <p>Картина поставляется без рамы.</p>
-                        </div>
-                        ${product.soldOut ? 
-                            '<div class="sold-out">Продано</div>' : 
-                            '<button class="add-to-cart">Добавить в корзину</button>'
-                        }
-                    </div>
-                </div>
-            `;
-            
-            initThumbnails(product);
-            
-            document.getElementById('back-to-gallery').addEventListener('click', function() {
-                showPage('gallery');
-            });
-            
-            const addToCartBtn = document.querySelector('.add-to-cart');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function() {
-                    alert('Товар добавлен в корзину!');
-                });
+            // Если есть турниры за текущий месяц - показываем его
+            if (tournaments.some(t => t.month === currentMonth)) {
+                defaultMonth = currentMonth;
+            } 
+            // Если текущий месяц уже прошел, показываем следующий
+            else if (tournaments.some(t => t.month > currentMonth)) {
+                // Находим ближайший будущий месяц с турнирами
+                const futureMonths = tournaments.filter(t => t.month > currentMonth);
+                if (futureMonths.length > 0) {
+                    defaultMonth = Math.min(...futureMonths.map(t => t.month));
+                }
             }
             
-            showPage('product');
-        }
-
-        // Инициализация миниатюр
-        function initThumbnails(product) {
-            const thumbnails = document.querySelectorAll('.product-thumbnail');
-            thumbnails.forEach(thumbnail => {
-                thumbnail.addEventListener('click', function() {
-                    thumbnails.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const mainImage = document.getElementById('main-product-image');
-                    mainImage.src = this.getAttribute('data-image');
-                    
-                    mainImage.style.maxWidth = '100%';
-                    mainImage.style.maxHeight = '65vh';
-                    mainImage.style.width = 'auto';
-                    mainImage.style.height = 'auto';
-                    mainImage.style.objectFit = 'contain';
+            // Активируем соответствующую кнопку
+            const monthButtons = document.querySelectorAll('.month-btn');
+            monthButtons.forEach(button => {
+                if (button.dataset.month === defaultMonth.toString()) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            });
+            
+            // Показываем турниры для выбранного месяца
+            displayTournaments(defaultMonth);
+            
+            // Обработчики для кнопок фильтрации
+            monthButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    monthButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    displayTournaments(button.dataset.month);
                 });
             });
-        }
+        });
     </script>
 </body>
 </html>
