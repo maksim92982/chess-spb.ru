@@ -20,6 +20,8 @@
     <title>Детские шахматные турниры в Санкт-Петербурге 2025 | Расписание и регистрация</title>
     <meta name="description" content="Полное расписание детских шахматных турниров в СПб на 2025 год. Даты, места проведения, возрастные группы и условия участия. Регистрируйтесь онлайн!">
     <meta name="keywords" content="шахматы для детей, турниры по шахматам СПб, шахматные соревнования 2025, детские шахматы Санкт-Петербург">
+    <meta name="robots" content="index, follow">
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     
     <!-- OpenGraph для соцсетей -->
     <meta property="og:title" content="Детские шахматные турниры в Санкт-Петербурге">
@@ -47,13 +49,25 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Детские шахматные турниры СПб",
-      "url": "https://www.chess-spb.ru/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.chess-spb.ru/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
+      "@type": "SportsEvent",
+      "name": "Детские шахматные турниры в Санкт-Петербурге",
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "Санкт-Петербург",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Санкт-Петербург",
+          "addressCountry": "RU"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "Детские шахматные турниры СПб",
+        "url": "https://chess-spb.ru"
       }
     }
     </script>
@@ -222,6 +236,35 @@
             grid-column: 1 / -1;
         }
         
+        .seo-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .seo-content h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .seo-content h3 {
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.3rem;
+        }
+        
+        .seo-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .seo-content li {
+            margin-bottom: 0.5rem;
+        }
+        
         @media (max-width: 768px) {
             .tournament-list {
                 grid-template-columns: 1fr;
@@ -252,6 +295,25 @@
             <br>
             <p>Здесь вы найдете актуальную информацию о детских шахматных турниры в Санкт-Петербурге. Мы собираем данные со всех клубов и организаторов, чтобы вам было удобно планировать участие в соревнованиях.</p>
         </div>
+        
+        <section class="seo-content">
+            <h2>Детские шахматные турниры в Санкт-Петербурге 2025</h2>
+            <p>Полное расписание шахматных турниров для детей в Санкт-Петербурге на 2025 год. 
+            Мы собираем информацию со всех шахматных клубов города: T-Chess, ChessChamp, GoodChess, 
+            ШК Сестрорецк и других организаторов.</p>
+            
+            <h3>Популярные шахматные клубы СПб</h3>
+            <ul>
+                <li>T-Chess - турниры по рапиду и классике</li>
+                <li>ChessChamp - соревнования для всех возрастов</li>
+                <li>GoodChess - детские турниры с разными рейтинговыми группами</li>
+                <li>ШК Сестрорецк - турниры в Курортном районе</li>
+            </ul>
+            
+            <h3>Как принять участие в турнире?</h3>
+            <p>Выберите подходящий турнир по дате, возрасту и рейтингу. Нажмите "Подробнее" 
+            для регистрации. Участвуйте в шахматных соревнованиях и повышайте свой рейтинг!</p>
+        </section>
         
         <div class="month-filter">
             <button class="month-btn" data-month="all">Все турниры</button>
@@ -825,6 +887,24 @@
             }
         ];
 
+        // Функция для добавления структурированных данных турнира
+        function addTournamentStructuredData(tournament) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SportsEvent",
+                "name": tournament.name,
+                "startDate": `2025-${tournament.month.toString().padStart(2, '0')}-01`,
+                "location": {
+                    "@type": "Place",
+                    "name": tournament.location || "Санкт-Петербург"
+                },
+                "description": `Шахматный турнир: ${tournament.format}. ${tournament.groups.join(', ')}`
+            });
+            document.head.appendChild(script);
+        }
+
         // Функция для отображения турниров
         function displayTournaments(month = 'all') {
             const container = document.getElementById('tournamentContainer');
@@ -867,6 +947,9 @@
                 `;
                 
                 container.appendChild(card);
+                
+                // Добавляем структурированные данные для турнира
+                addTournamentStructuredData(tournament);
             });
         }
         
