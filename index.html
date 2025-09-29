@@ -19,16 +19,34 @@
     <!-- Основные SEO-теги -->
     <title>Детские шахматные турниры в Санкт-Петербурге 2025 | Расписание и регистрация</title>
     <meta name="description" content="Полное расписание детских шахматных турниров в СПб на 2025 год. Даты, места проведения, возрастные группы и условия участия. Регистрируйтесь онлайн!">
-    <meta name="keywords" content="шахматы для детей, турниры по шахматам СПб, шахматные соревнования 2025, детские шахматы Санкт-Петербург">
-    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="шахматы для детей, турниры по шахматам СПб, шахматные соревнования 2025, детские шахматы Санкт-Петербург, шахматные клубы СПб, T-Chess, ChessChamp, GoodChess, ШК Сестрорецк, рапид, классика, блиц, рейтинг ФШР">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
     <link rel="sitemap" type="application/xml" href="/sitemap.xml">
     
+    <!-- Дополнительные SEO теги -->
+    <meta name="author" content="Детские шахматные турниры СПб">
+    <meta name="language" content="ru">
+    <meta name="geo.region" content="RU-SPE">
+    <meta name="geo.placename" content="Санкт-Петербург">
+    <meta name="geo.position" content="59.9311;30.3609">
+    <meta name="ICBM" content="59.9311, 30.3609">
+    
     <!-- OpenGraph для соцсетей -->
-    <meta property="og:title" content="Детские шахматные турниры в Санкт-Петербурге">
-    <meta property="og:description" content="Актуальное расписание турниров по шахматам для детей в СПб">
+    <meta property="og:title" content="Детские шахматные турниры в Санкт-Петербурге 2025">
+    <meta property="og:description" content="Полное расписание детских шахматных турниров в СПб на 2025 год. Даты, места проведения, возрастные группы и условия участия.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.chess-spb.ru/">
-    <meta property="og:image" content="https://www.chess-spb.ru/logo.jpg">
+    <meta property="og:url" content="https://chess-spb.ru/">
+    <meta property="og:image" content="https://chess-spb.ru/logo.jpg">
+    <meta property="og:site_name" content="Детские шахматные турниры СПб">
+    <meta property="og:locale" content="ru_RU">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Детские шахматные турниры в Санкт-Петербурге 2025">
+    <meta name="twitter:description" content="Полное расписание детских шахматных турниров в СПб на 2025 год">
+    <meta name="twitter:image" content="https://chess-spb.ru/logo.jpg">
     
     <!-- Favicon -->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -69,6 +87,50 @@
         "name": "Детские шахматные турниры СПб",
         "url": "https://chess-spb.ru"
       }
+    }
+    </script>
+    
+    <!-- Дополнительная Schema.org разметка для лучшего SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Детские шахматные турниры в Санкт-Петербурге",
+      "url": "https://chess-spb.ru",
+      "description": "Полное расписание детских шахматных турниров в СПб на 2025 год",
+      "inLanguage": "ru",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Детские шахматные турниры СПб",
+        "url": "https://chess-spb.ru"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://chess-spb.ru/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- BreadcrumbList для навигации -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://chess-spb.ru"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Турниры 2025",
+          "item": "https://chess-spb.ru#tournaments"
+        }
+      ]
     }
     </script>
     
@@ -265,6 +327,32 @@
             margin-bottom: 0.5rem;
         }
         
+        .user-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .user-content h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .user-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
         @media (max-width: 768px) {
             .tournament-list {
                 grid-template-columns: 1fr;
@@ -287,16 +375,18 @@
     <div class="container">
         <div class="intro">
             <h2>Добро пожаловать на наш шахматный портал!</h2><br>
-            <p>Вступай в нашу группу в Телеграм
-            <a href="https://t.me/chesskidsspb" target="_blank" style="color: #3498db; font-weight: bold; text-decoration: none;">
-            <span style="font-size:1.2em;">📢</span> ЗДЕСЬ
+            <p style="font-size: 1.4rem; font-weight: bold; text-align: center; margin: 1.5rem 0;">
+            Вступай в нашу группу в Телеграм
+            <a href="https://t.me/chesskidsspb" target="_blank" style="color: #e74c3c; font-weight: bold; text-decoration: none; font-size: 1.6rem; background: linear-gradient(45deg, #ff6b6b, #ff8e8e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+            <span style="font-size: 2em; display: inline-block; animation: pulse 2s infinite;">📢</span> ЗДЕСЬ
             </a>
             </p>
             <br>
             <p>Здесь вы найдете актуальную информацию о детских шахматных турниры в Санкт-Петербурге. Мы собираем данные со всех клубов и организаторов, чтобы вам было удобно планировать участие в соревнованиях.</p>
         </div>
         
-        <section class="seo-content">
+        <!-- SEO-контент скрыт для пользователей, но виден поисковым системам -->
+        <section class="seo-content" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;">
             <h2>Детские шахматные турниры в Санкт-Петербурге 2025</h2>
             <p>Полное расписание шахматных турниров для детей в Санкт-Петербурге на 2025 год. 
             Мы собираем информацию со всех шахматных клубов города: T-Chess, ChessChamp, GoodChess, 
@@ -315,7 +405,14 @@
             для регистрации. Участвуйте в шахматных соревнованиях и повышайте свой рейтинг!</p>
         </section>
         
-        <div class="month-filter">
+        <!-- Видимый контент для пользователей -->
+        <section class="user-content">
+            <h3>Как принять участие в турнире?</h3>
+            <p>Выберите подходящий турнир по дате, возрасту и рейтингу. Нажмите "Подробнее" 
+            для регистрации. Участвуйте в шахматных соревнованиях и повышайте свой рейтинг!</p>
+        </section>
+        
+        <div class="month-filter" id="tournaments">
             <button class="month-btn" data-month="all">Все турниры</button>
             <button class="month-btn" data-month="7">Июль</button>
             <button class="month-btn" data-month="8">Август</button>
