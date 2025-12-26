@@ -352,7 +352,28 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+
+        .year-header {
+    grid-column: 1 / -1;
+    margin-bottom: 1.5rem;
+}
+
+.tournament-card[data-year="2026"] {
+    border-left: 4px solid #e74c3c;
+}
+
+.tournament-card[data-year="2026"] .card-header {
+    background-color: #e74c3c;
+}
+
+.year-badge {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
         @media (max-width: 768px) {
             .tournament-list {
                 grid-template-columns: 1fr;
@@ -419,6 +440,7 @@
             <button class="month-btn" data-month="10">Октябрь</button>
             <button class="month-btn" data-month="11">Ноябрь</button>
             <button class="month-btn" data-month="12">Декабрь</button>
+            <button class="month-btn" data-month="13">Январь 2026</button>
          </div>
         
         <div class="tournament-list" id="tournamentContainer">
@@ -1201,6 +1223,7 @@
 
 // ДЕКАБРЬСКИЕ ТУРНИРЫ
 // ДЕКАБРЬСКИЕ ТУРНИРЫ (ОБНОВЛЕННЫЕ)
+// ДЕКАБРЬСКИЕ ТУРНИРЫ 2025
 {
     id: 53,
     name: "ПШС",
@@ -1283,6 +1306,65 @@
 },
 {
     id: 58,
+    name: "Шах и мат",
+    location: "ТЦ Светлановский",
+    date: "21 декабря",
+    format: "Рапид и Семейный турнир",
+    groups: [
+        "Рапид 7 туров (10+3): 2019-2020 г.р. до 1150",
+        "Рапид 7 туров (10+3): 2015 г.р. и младше до 1200",
+        "Семейный турнир 1+1: 7 туров (10+3), средний рейтинг команды до 1200"
+    ],
+    fee: "1800₽ / 2400₽",
+    link: "https://vk.com/wall-199387001_1709",
+    month: 12
+},
+{
+    id: 59,
+    name: "Турнир для начинающих",
+    location: "Конгресс-холл 'Васильевский', Наб.реки Смоленки д.2",
+    date: "21 декабря",
+    format: "Рапид 7 туров (10+5)",
+    groups: [
+        "Без рейтинга или никогда не имевшие рейтинг более 1050 (2014 и младше)",
+        "От 1050-1150 (2009 и младше)",
+        "До 1250 (2009 и младше)",
+        "До 1400 без ограничений"
+    ],
+    fee: "1500₽",
+    link: "https://vk.com/kidschessspb?from=groups",
+    month: 12
+},
+{
+    id: 60,
+    name: "ШШАБ",
+    location: "Татарский пер.",
+    date: "21 декабря",
+    format: "Рапид 7 туров (10'+5'')",
+    groups: [
+        "Семейный турнир (командный)",
+        "Без ограничений по возрасту",
+        "Без ограничений по рейтингу"
+    ],
+    fee: "3000₽ с команды",
+    link: "https://vk.com/wall-218530296_152",
+    month: 12
+},
+{
+    id: 61,
+    name: "СШОР-2 Калининского р-на",
+    location: "",
+    date: "21 декабря",
+    format: "Блиц 11 туров (3+2)",
+    groups: [
+        "Рейтинг от 1300"
+    ],
+    fee: "Бесплатно",
+    link: "https://vk.com/wall-95344669_1643",
+    month: 12
+},
+{
+    id: 62,
     name: "ШК Медный всадник",
     location: "Саперный пер., 10",
     date: "20-21 декабря",
@@ -1299,7 +1381,60 @@
     month: 12
 },
 {
-    id: 59,
+    id: 63,
+    name: "Всеволожск IQ Cup",
+    location: "Всеволожск",
+    date: "27 декабря",
+    format: "Рапид 7 туров (8+3)",
+    groups: [
+        "Дети до 15 лет"
+    ],
+    fee: "2000₽",
+    link: "https://vk.ru/wall-210773312_739",
+    month: 12
+},
+{
+    id: 64,
+    name: "Mindchess",
+    location: "Электросила",
+    date: "27 декабря",
+    format: "Рапид 7 туров (10+5)",
+    groups: [
+        "2015 г.р. и младше"
+    ],
+    fee: "1600₽",
+    link: "https://vk.ru/wall-178964257_1883",
+    month: 12
+},
+{
+    id: 65,
+    name: "Выборг",
+    location: "Выборг",
+    date: "27 декабря",
+    format: "Рапид 9 туров (10+5)",
+    groups: [
+        "Информация уточняется"
+    ],
+    fee: "100₽",
+    link: "https://vk.ru/wall-17781056_2284",
+    month: 12
+},
+{
+    id: 66,
+    name: "Чессменский",
+    location: "м. Московская",
+    date: "27-29 декабря",
+    format: "Классика 7 туров",
+    groups: [
+        "Рейтинг до 1200 не старше 2013 г.р.",
+        "Рейтинг 1200-1500 не старше 2010 г.р."
+    ],
+    fee: "2000₽",
+    link: "https://vk.com/wall-224747676_799",
+    month: 12
+},
+{
+    id: 67,
     name: "ШК Медный всадник",
     location: "Саперный пер., 10",
     date: "27-28 декабря",
@@ -1312,98 +1447,7 @@
     month: 12
 },
 {
-    id: 60,
-    name: "ШК Медный всадник",
-    location: "Саперный пер., 10",
-    date: "8-11 января",
-    format: "Классика 8 туров (57+3)",
-    groups: [
-        "Информация уточняется"
-    ],
-    fee: "3000₽",
-    link: "https://clubvsadnik.ru/winter_festival_2026#!/tab/1607572021-2",
-    month: 12
-},
-{
-    id: 61,
-    name: "Турнир для начинающих",
-    location: "Конгресс-холл 'Васильевский', Наб.реки Смоленки д.2",
-    date: "21 декабря",
-    format: "Рапид 7 туров (10+5) и Блиц 7 туров (5+3)",
-    groups: [
-        "Рапид: Без рейтинга или ≤1050 (2014 и младше)",
-        "Рапид: От 1050-1150 (2009 и младше)",
-        "Рапид: До 1250 (2009 и младше)",
-        "Рапид: До 1400 без ограничений",
-        "Блиц: До 1250",
-        "Блиц: До 1500"
-    ],
-    fee: "1500₽",
-    link: "https://vk.com/kidschessspb?from=groups",
-    month: 12
-},
-{
-    id: 62,
-    name: "Василеостровская ШШ",
-    location: "Морская 15",
-    date: "Регулярные турниры",
-    format: "Классика, Блиц, Рапид (темпо)",
-    groups: [
-        "Классика: понедельник и четверг с 18:30 (60+10)",
-        "Блиц: среда с 18:30 (5+3), 7 туров",
-        "Рапид (темпо): суббота с 16:00 (10+5), 7 туров",
-        "Без ограничений рейтинга и возраста"
-    ],
-    fee: "Бесплатно",
-    link: "https://vk.com/wall-55891840_8699",
-    month: 12
-},
-{
-    id: 63,
-    name: "ШШАБ",
-    location: "Татарский пер.",
-    date: "21 декабря",
-    format: "Рапид 7 туров (10'+5'')",
-    groups: [
-        "Семейный турнир (командный)",
-        "Без ограничений по возрасту",
-        "Без ограничений по рейтингу"
-    ],
-    fee: "3000₽ с команды",
-    link: "https://vk.com/wall-218530296_152",
-    month: 12
-},
-{
-    id: 64,
-    name: "Шах и мат",
-    location: "ТЦ Светлановский",
-    date: "21 декабря",
-    format: "Рапид и Семейный турнир",
-    groups: [
-        "Рапид 7 туров (10+3): 2019-2020 г.р. до 1150",
-        "Рапид 7 туров (10+3): 2015 г.р. и младше до 1200",
-        "Семейный турнир 1+1: 7 туров (10+3), средний рейтинг команды до 1200"
-    ],
-    fee: "1800₽ / 2400₽",
-    link: "https://vk.com/wall-199387001_1709",
-    month: 12
-},
-{
-    id: 65,
-    name: "СШОР-2 Калининского р-на",
-    location: "",
-    date: "21, 26-29 декабря",
-    format: "Блиц и Классика",
-    groups: [
-        "21 декабря: Блиц 11 туров (3+2), рейтинг от 1300",
-        "26-29 декабря: Классика 8 туров (57+3), рейтинг от 1300"
-    ],
-    fee: "Бесплатно",
-    link: "https://vk.com/wall-95344669_1643",
-    month: 12
-},
-{
-    id: 66,
+    id: 68,
     name: "Чессть",
     location: "",
     date: "28 декабря",
@@ -1418,21 +1462,20 @@
     month: 12
 },
 {
-    id: 67,
-    name: "Чессменский",
-    location: "м. Московская",
-    date: "27-29 декабря",
-    format: "Классика 7 туров",
+    id: 69,
+    name: "СШОР-2 Калининского р-на",
+    location: "",
+    date: "26-29 декабря",
+    format: "Классика 8 туров (57+3)",
     groups: [
-        "Рейтинг до 1200 не старше 2013 г.р.",
-        "Рейтинг 1200-1500 не старше 2010 г.р."
+        "Рейтинг от 1300 и выше"
     ],
-    fee: "2000₽",
-    link: "https://vk.com/wall-224747676_799",
+    fee: "Бесплатно",
+    link: "https://vk.com/wall-95344669_1643",
     month: 12
 },
 {
-    id: 68,
+    id: 70,
     name: "ПШС",
     location: "ТК Озерки",
     date: "27-29 декабря",
@@ -1443,7 +1486,174 @@
     fee: "Уточняется",
     link: "https://vk.com/wall-43219990_2853",
     month: 12
+},
+{
+    id: 71,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "Регулярные турниры",
+    format: "Классика, Блиц, Рапид (темпо)",
+    groups: [
+        "Классика: понедельник и четверг с 18:30 (60+10)",
+        "Блиц: среда с 18:30 (5+3), 7 туров",
+        "Рапид (темпо): суббота с 16:00 (10+5), 7 туров",
+        "Без ограничений рейтинга и возраста"
+    ],
+    fee: "Бесплатно",
+    link: "https://vk.com/wall-55891840_8699",
+    month: 12
+},
+
+            // ЯНВАРЬСКИЕ ТУРНИРЫ 2026 (month: 13)
+{
+    id: 72,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "30 декабря",
+    format: "Рапид 7 туров (10+5)",
+    groups: [
+        "2019 г.р. и младше",
+        "2018 г.р. и младше",
+        "2017 г.р. и младше",
+        "2016 г.р. и младше",
+        "Без ограничения возраста с рейтингом ФШР ≤1500",
+        "OPEN (без ограничения возраста и рейтинга)"
+    ],
+    fee: "2000-2200₽",
+    link: "https://vk.ru/wall-55891840_8727",
+    month: 13
+},
+{
+    id: 73,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "1 января",
+    format: "Блиц 11 туров (3+2)",
+    groups: [
+        "2016 г.р. и младше",
+        "Без ограничения возраста с рейтингом ФШР ≤1500",
+        "OPEN (без ограничения возраста и рейтинга)"
+    ],
+    fee: "2000-2200₽",
+    link: "https://vk.ru/wall-55891840_8727",
+    month: 13
+},
+{
+    id: 74,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "2-5 января",
+    format: "Классика 8 туров (60+10)",
+    groups: [
+        "2019 г.р. и младше",
+        "2018 г.р. и младше",
+        "2017 г.р. и младше",
+        "2016 г.р. и младше",
+        "Рейтинг ФШР ≤1500, без ограничения возраста",
+        "OPEN (без ограничения по возрасту и рейтингу)"
+    ],
+    fee: "4000-4100₽",
+    link: "https://vk.ru/wall-55891840_8727",
+    month: 13
+},
+{
+    id: 75,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "6 января",
+    format: "Рапид 7 туров (10+5)",
+    groups: [
+        "2019 г.р. и младше",
+        "2018 г.р. и младше",
+        "2017 г.р. и младше",
+        "2016 г.р. и младше",
+        "Без ограничения возраста с рейтингом ФШР ≤1500",
+        "OPEN (без ограничения возраста и рейтинга)"
+    ],
+    fee: "2000-2200₽",
+    link: "https://vk.ru/wall-55891840_8727",
+    month: 13
+},
+{
+    id: 76,
+    name: "Василеостровская ШШ",
+    location: "Морская 15",
+    date: "7 января",
+    format: "Блиц 11 туров (3+2)",
+    groups: [
+        "2019 г.р. и младше",
+        "2018 г.р. и младше",
+        "2017 г.р. и младше",
+        "2016 г.р. и младше",
+        "Без ограничения возраста с рейтингом ФШР ≤1500",
+        "OPEN (без ограничения возраста и рейтинга)"
+    ],
+    fee: "2000-2200₽",
+    link: "https://vk.ru/wall-55891840_8727",
+    month: 13
+},
+{
+    id: 77,
+    name: "ШК Медный всадник",
+    location: "Саперный пер., 10",
+    date: "8-11 января",
+    format: "Классика 8 туров (57+3)",
+    groups: [
+        "Информация уточняется"
+    ],
+    fee: "3000₽",
+    link: "https://clubvsadnik.ru/winter_festival_2026#!/tab/1607572021-2",
+    month: 13
+},
+{
+    id: 78,
+    name: "ШКиДЦ",
+    location: "м. Ленинский пр.",
+    date: "6-10 января",
+    format: "Классика, Рапид, Блиц",
+    groups: [
+        "6-9 января: Классика 7-8 туров (57+3)",
+        "6-7 января: Рапид 9 туров (10+5), 2017 г.р. и младше",
+        "8 января: Турнир 2020 г.р. и младше (5 туров по 20 минут)",
+        "9-10 января: Рапид 7 туров (10+5), 2019 г.р. и младше",
+        "10 января: Блиц 11 туров (3+2), без ограничений"
+    ],
+    fee: "Уточняется",
+    link: "https://m.vk.ru/@shkidchess-kirovskii-novogodnii-2026",
+    month: 13
+},
+{
+    id: 79,
+    name: "Good Chess",
+    location: "наб. реки Смоленки, 2",
+    date: "17-18 января",
+    format: "Рапид 7-8 туров (10+5)",
+    groups: [
+        "А1: Открытый турнир б/о (8 туров, FIDE/ФШР)",
+        "А2: Детский рапид, рейтинг 0-1250 (8 туров, ФШР)",
+        "А3: Детский рапид, 2012 г.р. и младше (7 туров, ФШР)",
+        "А4: Детский рапид, 2017 г.р. и младше (7 туров, ФШР)",
+        "А5: Детский рапид, рейтинг 0-1100 (7 туров, ФШР)"
+    ],
+    fee: "1500-3000₽ (зависит от даты регистрации)",
+    link: "https://vk.ru/wall-165232463_2584",
+    month: 13
+},
+{
+    id: 80,
+    name: "СШОР-2 Калининского района",
+    location: "",
+    date: "16-18 января",
+    format: "Классика",
+    groups: [
+        "Рейтинг 1250-1650",
+        "Информация уточняется"
+    ],
+    fee: "Уточняется",
+    link: "",
+    month: 13
 }
+];
     
 ];
 
@@ -1466,52 +1676,73 @@
         }
 
         // Функция для отображения турниров
-        function displayTournaments(month = 'all') {
-            const container = document.getElementById('tournamentContainer');
-            container.innerHTML = '';
-            
-            let filteredTournaments = tournaments;
-            if (month !== 'all') {
-                filteredTournaments = tournaments.filter(t => t.month === parseInt(month));
-            }
-            
-            if (filteredTournaments.length === 0) {
-                container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
-                return;
-            }
-            
-            filteredTournaments.forEach(tournament => {
-                const card = document.createElement('div');
-                card.className = 'tournament-card';
-                
-                let groupsHTML = '';
-                tournament.groups.forEach(group => {
-                    groupsHTML += `<p>• ${group}</p>`;
-                });
-                
-                card.innerHTML = `
-                    <div class="card-header">
-                        <h3>${tournament.name}</h3>
-                        <p>${tournament.location}</p>
-                    </div>
-                    <div class="card-body">
-                        <div class="tournament-info">
-                            <p><span class="info-label">Дата:</span> ${tournament.date}</p>
-                            <p><span class="info-label">Формат:</span> ${tournament.format}</p>
-                            <p><span class="info-label">Группы:</span></p>
-                            ${groupsHTML}
-                            <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
-                        </div>
-                        <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
-                    </div>
-                `;
-                
-                container.appendChild(card);
-                
-                // Добавляем структурированные данные для турнира
-                addTournamentStructuredData(tournament);
-            });
+function displayTournaments(month = 'all') {
+    const container = document.getElementById('tournamentContainer');
+    container.innerHTML = '';
+    
+    let filteredTournaments = tournaments;
+    if (month !== 'all') {
+        filteredTournaments = tournaments.filter(t => t.month === parseInt(month));
+    }
+    
+    if (filteredTournaments.length === 0) {
+        container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
+        return;
+    }
+    
+    // Создаем заголовок для 2025 года (для месяцев 1-12)
+    if (month >= 1 && month <= 12) {
+        const yearHeader = document.createElement('div');
+        yearHeader.className = 'year-header';
+        yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">Турниры 2025 года</h2>`;
+        container.appendChild(yearHeader);
+    }
+    
+    // Создаем заголовок для 2026 года (месяц 13)
+    if (month === 13) {
+        const yearHeader = document.createElement('div');
+        yearHeader.className = 'year-header';
+        yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: #e74c3c; border-bottom: 2px solid #e74c3c; padding-bottom: 0.5rem;">Турниры 2026 года</h2>`;
+        container.appendChild(yearHeader);
+    }
+    
+    filteredTournaments.forEach(tournament => {
+        const card = document.createElement('div');
+        card.className = 'tournament-card';
+        
+        // Добавляем стиль для турниров 2026 года
+        if (tournament.month === 13) {
+            card.style.borderLeft = '4px solid #e74c3c';
         }
+        
+        let groupsHTML = '';
+        tournament.groups.forEach(group => {
+            groupsHTML += `<p>• ${group}</p>`;
+        });
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <h3>${tournament.name}</h3>
+                <p>${tournament.location}</p>
+            </div>
+            <div class="card-body">
+                <div class="tournament-info">
+                    <p><span class="info-label">Дата:</span> ${tournament.date}</p>
+                    <p><span class="info-label">Формат:</span> ${tournament.format}</p>
+                    <p><span class="info-label">Группы:</span></p>
+                    ${groupsHTML}
+                    <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
+                </div>
+                <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
+            </div>
+        `;
+        
+        container.appendChild(card);
+        
+        // Добавляем структурированные данные для турнира
+        addTournamentStructuredData(tournament);
+    });
+}
         
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
