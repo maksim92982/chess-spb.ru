@@ -1729,10 +1729,7 @@ function displayTournaments(month = 'all') {
         const card = document.createElement('div');
         card.className = 'tournament-card';
         
-        // Добавляем стиль для турниров 2026 года
-        if (tournament.month === 13) {
-            card.style.borderLeft = '4px solid #000000';
-        }
+        
         
         let groupsHTML = '';
         tournament.groups.forEach(group => {
