@@ -1721,7 +1721,7 @@ function displayTournaments(month = 'all') {
     if (month === 13) {
         const yearHeader = document.createElement('div');
         yearHeader.className = 'year-header';
-        yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: #e74c3c; border-bottom: 2px solid #e74c3c; padding-bottom: 0.5rem;">Турниры 2026 года</h2>`;
+        yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: #000000; border-bottom: 2px solid #e74c3c; padding-bottom: 0.5rem;">Турниры 2026 года</h2>`;
         container.appendChild(yearHeader);
     }
     
@@ -1731,7 +1731,7 @@ function displayTournaments(month = 'all') {
         
         // Добавляем стиль для турниров 2026 года
         if (tournament.month === 13) {
-            card.style.borderLeft = '4px solid #e74c3c';
+            card.style.borderLeft = '4px solid #000000';
         }
         
         let groupsHTML = '';
