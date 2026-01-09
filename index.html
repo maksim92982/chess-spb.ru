@@ -1764,48 +1764,60 @@ function displayTournaments(month = 'all') {
 }
         
         // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            // Определяем текущий месяц (1-12)
-            const currentMonth = new Date().getMonth() + 1;
-            
-            // Определяем, какой месяц показывать по умолчанию
-            let defaultMonth = 'all';
-            
-            // Если есть турниры за текущий месяц - показываем его
-            if (tournaments.some(t => t.month === currentMonth)) {
-                defaultMonth = currentMonth;
-            } 
-            // Если текущий месяц уже прошел, показываем следующий
-            else if (tournaments.some(t => t.month > currentMonth)) {
-                // Находим ближайший будущий месяц с турнирами
-                const futureMonths = tournaments.filter(t => t.month > currentMonth);
-                if (futureMonths.length > 0) {
-                    defaultMonth = Math.min(...futureMonths.map(t => t.month));
-                }
+        // Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    // Определяем текущий месяц (1-12) и год
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 1-12
+    const currentYear = now.getFullYear(); // 2026
+    
+    console.log(`Текущий месяц: ${currentMonth}, Текущий год: ${currentYear}`);
+    
+    // Определяем, какой месяц показывать по умолчанию
+    let defaultMonth = 'all';
+    
+    // Для января 2026 года нужно показывать месяц 13
+    if (currentYear >= 2026 && currentMonth === 1) {
+        // Январь 2026 - показываем наши турниры за месяц 13
+        if (tournaments.some(t => t.month === 13)) {
+            defaultMonth = 13;
+        }
+    } else {
+        // Для остальных месяцев работаем как раньше
+        if (tournaments.some(t => t.month === currentMonth)) {
+            defaultMonth = currentMonth;
+        } else if (tournaments.some(t => t.month > currentMonth)) {
+            const futureMonths = tournaments.filter(t => t.month > currentMonth);
+            if (futureMonths.length > 0) {
+                defaultMonth = Math.min(...futureMonths.map(t => t.month));
             }
-            
-            // Активируем соответствующую кнопку
-            const monthButtons = document.querySelectorAll('.month-btn');
-            monthButtons.forEach(button => {
-                if (button.dataset.month === defaultMonth.toString()) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
-            });
-            
-            // Показываем турниры для выбранного месяца
-            displayTournaments(defaultMonth);
-            
-            // Обработчики для кнопок фильтрации
-            monthButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    monthButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    displayTournaments(button.dataset.month);
-                });
-            });
+        }
+    }
+    
+    console.log(`Будем показывать месяц: ${defaultMonth}`);
+    
+    // Активируем соответствующую кнопку
+    const monthButtons = document.querySelectorAll('.month-btn');
+    monthButtons.forEach(button => {
+        if (button.dataset.month === defaultMonth.toString()) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+    
+    // Показываем турниры для выбранного месяца
+    displayTournaments(defaultMonth);
+    
+    // Обработчики для кнопок фильтрации
+    monthButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            monthButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            displayTournaments(button.dataset.month);
         });
+    });
+});
     </script>
 </body>
 </html>
