@@ -451,6 +451,7 @@
             <button class="month-btn" data-month="11">Ноябрь</button>
             <button class="month-btn" data-month="12">Декабрь</button>
             <button class="month-btn" data-month="13">Январь 2026</button>
+            <button class="month-btn" data-month="14">Февраль</button>
          </div>
         
         <div class="tournament-list" id="tournamentContainer">
@@ -1681,7 +1682,65 @@
     fee: "800-2500₽",
     link: "https://t-chess.ru/242501",
     month: 13
+},
+//турниры февраля 
+            {
+    id: 82,
+    name: "На Петроградской стороне",
+    location: "Петроградская сторона",
+    date: "02-12 февраля",
+    format: "Классика 9 туров (90+30)",
+    groups: [
+        "Турнир без ограничений возраста и рейтинга"
+    ],
+    fee: "4000-5000₽",
+    link: "http://totalchess.org/zima-na-petrogradskoj-storone-2026.html",
+    month: 14
+},
+{
+    id: 83,
+    name: "GoodChess",
+    location: "Чкаловская",
+    date: "19-22 февраля",
+    format: "Классика",
+    groups: [
+        "К1. Детский турнир для участников 2015 года рождения и младше с рейтингом ФШР от 0 до 1150",
+        "К2. Детский турнир для участников 2013 года рождения и младше с рейтингом ФШР от 0 до 1400 (допускаются участники 2010-2012 г.р. с рейтингом ФШР по классике 0-1250)"
+    ],
+    fee: "2500₽",
+    link: "https://goodchess-classic.tb.ru",
+    month: 14
+},
+{
+    id: 84,
+    name: "Петровская ладья",
+    location: "Чайковского ул.",
+    date: "1 февраля",
+    format: "Рапид 9 туров (10+5)",
+    groups: [
+        "Турнир для всех желающих"
+    ],
+    fee: "2000₽",
+    link: "https://vk.ru/wall-848739_2921",
+    month: 14
+},
+{
+    id: 85,
+    name: "Охта парк Chess",
+    location: "Охта парк",
+    date: "23-25 февраля",
+    format: "Рапид, Классика, Блиц",
+    groups: [
+        "Рапид 7 туров (10+5): взнос 2400₽",
+        "Классика: В1,В2 7 туров (60+30), В3,В4 7 туров (30+30), взнос 4200₽",
+        "Блиц 11 туров (3+2): взнос 1800₽",
+        "Категории: 1450 и выше, 1200-1499, 1000-1249 (2011г.р. и младше)"
+    ],
+    fee: "1800-4200₽",
+    link: "https://vk.ru/wall-157175360_2701",
+    month: 14
 }
+            
 ];
     
 
@@ -1727,8 +1786,8 @@ function displayTournaments(month = 'all') {
         container.appendChild(yearHeader);
     }
     
-    // Создаем заголовок для 2026 года (месяц 13)
-    if (month === 13) {
+    // Создаем заголовок для 2026 года (месяц 13 и 14)
+if (month === 13 || month === 14) {
         const yearHeader = document.createElement('div');
         yearHeader.className = 'year-header';
         yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: #000000; border-bottom: 2px solid #3498db; padding-bottom: 0.5rem;">Турниры 2026 года</h2>`;
