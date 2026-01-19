@@ -1803,23 +1803,74 @@
     
 
 
-        // Функция для добавления структурированных данных турнира
-        function addTournamentStructuredData(tournament) {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "SportsEvent",
-                "name": tournament.name,
-                "startDate": `2025-${tournament.month.toString().padStart(2, '0')}-01`,
-                "location": {
-                    "@type": "Place",
-                    "name": tournament.location || "Санкт-Петербург"
-                },
-                "description": `Шахматный турнир: ${tournament.format}. ${tournament.groups.join(', ')}`
-            });
-            document.head.appendChild(script);
+function parseRussianDate(dateString, monthNumber) {
+    const months = {
+        "января": 1, "февраля": 2, "марта": 3, "апреля": 4,
+        "мая": 5, "июня": 6, "июля": 7, "августа": 8,
+        "сентября": 9, "октября": 10, "ноября": 11, "декабря": 12
+    };
+
+    const year = monthNumber >= 13 ? 2026 : 2025;
+    const realMonth = monthNumber >= 13 ? monthNumber - 12 : monthNumber;
+
+    dateString = dateString.replace(/,/g, ' ').replace(/\s+/g, ' ').trim();
+
+    const dateParts = dateString.match(/(\d+(?:-\d+)*)/g);
+    const monthName = dateString.match(/([а-я]+)/i);
+
+    if (!dateParts || !monthName) return null;
+
+    const month = months[monthName[1]];
+
+    const ranges = dateParts.map(r => {
+        if (r.includes('-')) {
+            const [startDay, endDay] = r.split('-');
+            return {
+                start: `${year}-${String(month).padStart(2, '0')}-${String(startDay).padStart(2, '0')}`,
+                end: `${year}-${String(month).padStart(2, '0')}-${String(endDay).padStart(2, '0')}`
+            };
+        } else {
+            return {
+                start: `${year}-${String(month).padStart(2, '0')}-${String(r).padStart(2, '0')}`,
+                end: `${year}-${String(month).padStart(2, '0')}-${String(r).padStart(2, '0')}`
+            };
         }
+    });
+
+    return ranges;
+}
+
+
+
+        // Функция для добавления структурированных данных турнира
+        
+
+function addTournamentStructuredData(tournament) {
+    const dateRanges = parseRussianDate(tournament.date, tournament.month);
+    if (!dateRanges) return;
+
+    const events = dateRanges.map(r => ({
+        "@context": "https://schema.org",
+        "@type": "SportsEvent",
+        "name": tournament.name,
+        "startDate": r.start,
+        "endDate": r.end,
+        "location": {
+            "@type": "Place",
+            "name": tournament.location || "Санкт-Петербург"
+        },
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "description": `Шахматный турнир: ${tournament.format}. ${tournament.groups.join(', ')}`,
+    }));
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(events.length === 1 ? events[0] : events);
+    document.head.appendChild(script);
+}
+
+
 
         // Функция для отображения турниров
 function displayTournaments(month = 'all') {
