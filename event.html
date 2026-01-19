@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Загрузка...</title>
+    <meta name="description" content="Описание турнира...">
+
+    style.css
+</head>
+<body>
+
+<div class="container" id="eventContainer">
+    Загрузка...
+</div>
+
+tournaments.js</script>
+
+<script>
+// === Получаем ID ===
+const params = new URLSearchParams(window.location.search);
+const id = parseInt(params.get("id"));
+
+const tournament = tournaments.find(t => t.id === id);
+
+if (!tournament) {
+    document.getElementById("eventContainer").innerHTML =
+        "<h2>Турнир не найден</h2>";
+} else {
+    // === Подставляем данные ===
+    document.title = tournament.name + " — шахматный турнир";
+
+    document.querySelector('meta[name="description"]').content =
+        `${tournament.name} — ${tournament.format}. Дата: ${tournament.date}.`;
+
+    document.getElementById("eventContainer").innerHTML = `
+        <h1>${tournament.name}</h1>
+        <p><b>Дата:</b> ${tournament.date}</p>
+        <p><b>Место:</b> ${tournament.location}</p>
+        <p><b>Формат:</b> ${tournament.format}</p>
+        <p><b>Группы:</b> ${tournament.groups.join("<br>")}</p>
+        <p><b>Взнос:</b> ${tournament.fee}</p>
+        ${tournament.link}Регистрация</a>
+    `;
+
+    // === Schema.org ===
+    const dates = parseRussianDate(tournament.date, tournament.month);
+    const eventData = {
+        "@context": "https://schema.org",
+        "@type": "SportsEvent",
+        "name": tournament.name,
+        "startDate": dates[0].start,
+        "endDate": dates[dates.length - 1].end,
+        "location": {
+            "@type": "Place",
+            "name": tournament.location || "Санкт-Петербург"
+        },
+        "description": `Турнир: ${tournament.format}. ${tournament.groups.join(', ')}`
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(eventData);
+    document.head.appendChild(script);
+}
+</script>
+
+</body>
+</html>
