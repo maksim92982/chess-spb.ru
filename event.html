@@ -1,22 +1,7 @@
 
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Загрузка...</title>
-    <meta name="description" content="Описание турнира...">
-
-    style.css
-</head>
-<body>
-
-<div class="container" id="eventContainer">
-    Загрузка...
-</div>
-
-tournaments.js</script>
+<script>
+// вставь сюда функцию parseRussianDate из index.html
+</script>
 
 <script>
 // === Получаем ID ===
@@ -30,7 +15,7 @@ if (!tournament) {
         "<h2>Турнир не найден</h2>";
 } else {
     // === Подставляем данные ===
-    document.title = tournament.name + " — шахматный турнир";
+   ный турнир";
 
     document.querySelector('meta[name="description"]').content =
         `${tournament.name} — ${tournament.format}. Дата: ${tournament.date}.`;
@@ -40,13 +25,14 @@ if (!tournament) {
         <p><b>Дата:</b> ${tournament.date}</p>
         <p><b>Место:</b> ${tournament.location}</p>
         <p><b>Формат:</b> ${tournament.format}</p>
-        <p><b>Группы:</b> ${tournament.groups.join("<br>")}</p>
+        <p><b>Группы:</b><br>${tournament.groups.join("<br>")}</p>
         <p><b>Взнос:</b> ${tournament.fee}</p>
         ${tournament.link}Регистрация</a>
     `;
 
     // === Schema.org ===
     const dates = parseRussianDate(tournament.date, tournament.month);
+
     const eventData = {
         "@context": "https://schema.org",
         "@type": "SportsEvent",
