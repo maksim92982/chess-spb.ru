@@ -435,7 +435,13 @@
         </section>
         
         <div class="month-filter" id="tournaments">
-            <button class="month-btn" data-filter="2025-all">2025</button>
+            <button class="month-btn" data-filter="all">Все турниры</button>
+            <button class="month-btn" data-filter="2025-7">Июль 2025</button>
+            <button class="month-btn" data-filter="2025-8">Август 2025</button>
+            <button class="month-btn" data-filter="2025-9">Сентябрь 2025</button>
+            <button class="month-btn" data-filter="2025-10">Октябрь 2025</button>
+            <button class="month-btn" data-filter="2025-11">Ноябрь 2025</button>
+            <button class="month-btn" data-filter="2025-12">Декабрь 2025</button>
             <button class="month-btn" data-filter="2026-1">Январь 2026</button>
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
         </div>
@@ -1992,49 +1998,15 @@
             return 999;
         }
 
-        function buildIsoDate(year, month, day) {
-            const mm = month.toString().padStart(2, '0');
-            const dd = day.toString().padStart(2, '0');
-            return `${year}-${mm}-${dd}`;
-        }
-
-        function determineDateRange(tournament) {
-            const rangeMatch = tournament.date.match(/(\d+)\s*[-–]\s*(\d+)/);
-            if (rangeMatch) {
-                return {
-                    start: parseInt(rangeMatch[1], 10),
-                    end: parseInt(rangeMatch[2], 10)
-                };
-            }
-
-            const days = tournament.date.match(/\d+/g);
-            if (days && days.length) {
-                const firstDay = parseInt(days[0], 10);
-                return { start: firstDay, end: firstDay };
-            }
-
-            return { start: 1, end: 1 };
-        }
-
-        function buildTournamentStructuredData(tournament) {
-            const { start, end } = determineDateRange(tournament);
-            const startDate = buildIsoDate(tournament.year, tournament.month, start);
-            const endDate = buildIsoDate(tournament.year, tournament.month, end);
-            const groups = (tournament.groups || []).join(', ');
-            const priceMatch = tournament.fee ? tournament.fee.match(/(\d+)/) : null;
-            const offer = priceMatch ? {
-                "@type": "Offer",
-                "price": parseFloat(priceMatch[1]),
-                "priceCurrency": "RUB",
-                "url": tournament.link
-            } : null;
-
-            const structuredData = {
+        function addTournamentStructuredData(tournament) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "SportsEvent",
                 "name": tournament.name,
-                "startDate": startDate,
-                "endDate": endDate,
+                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
+                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
                 "eventStatus": "https://schema.org/EventScheduled",
                 "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                 "location": {
@@ -2046,33 +2018,12 @@
                         "addressCountry": "RU"
                     }
                 },
-                "description": `Шахматный турнир: ${tournament.format}. ${groups}`,
+                "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
                 "organizer": {
                     "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб",
+                    "name": tournament.name,
                     "url": tournament.link
-                },
-                "image": tournament.image || "https://chess-spb.ru/logo.jpg",
-                "performer": {
-                    "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб"
                 }
-            };
-
-            if (offer) {
-                structuredData.offers = offer;
-            }
-
-            return structuredData;
-        }
-
-        function injectStructuredData(tournaments) {
-            const graph = tournaments.map(buildTournamentStructuredData);
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify({
-                "@context": "https://schema.org",
-                "@graph": graph
             });
             document.head.appendChild(script);
         }
@@ -2105,11 +2056,8 @@
             `;
 
             container.appendChild(card);
+            addTournamentStructuredData(tournament);
         }
-
-        injectStructuredData(tournaments);
-
-        const YEAR_FILTER_2025 = '2025-all';
 
         function getMonthName(monthNumber) {
             const months = [
@@ -2119,40 +2067,49 @@
             return months[monthNumber - 1] || '';
         }
 
-        function displayTournaments(filter = YEAR_FILTER_2025) {
+        function displayTournaments(filter = 'all') {
             const container = document.getElementById('tournamentContainer');
             container.innerHTML = '';
 
             let filteredTournaments = tournaments;
 
-            if (filter === YEAR_FILTER_2025) {
-                filteredTournaments = tournaments.filter(t => t.year === 2025);
-            } else {
+            if (filter !== 'all') {
                 const [year, month] = filter.split('-').map(Number);
                 filteredTournaments = tournaments.filter(t => t.year === year && t.month === month);
-            }
 
-            filteredTournaments.sort((a, b) => {
-                if (a.year !== b.year) {
-                    return a.year - b.year;
-                }
-                if (a.month !== b.month) {
-                    return a.month - b.month;
-                }
-                const dayA = extractDayFromDate(a.date);
-                const dayB = extractDayFromDate(b.date);
-                if (dayA !== dayB) {
-                    return dayA - dayB;
-                }
-                return a.name.localeCompare(b.name, 'ru');
-            });
+                filteredTournaments.sort((a, b) => {
+                    const dayA = extractDayFromDate(a.date);
+                    const dayB = extractDayFromDate(b.date);
+
+                    if (dayA !== dayB) {
+                        return dayA - dayB;
+                    }
+
+                    return a.name.localeCompare(b.name, 'ru');
+                });
+            } else {
+                filteredTournaments.sort((a, b) => {
+                    if (a.year !== b.year) {
+                        return a.year - b.year;
+                    }
+                    if (a.month !== b.month) {
+                        return a.month - b.month;
+                    }
+                    const dayA = extractDayFromDate(a.date);
+                    const dayB = extractDayFromDate(b.date);
+                    if (dayA !== dayB) {
+                        return dayA - dayB;
+                    }
+                    return a.name.localeCompare(b.name, 'ru');
+                });
+            }
 
             if (filteredTournaments.length === 0) {
                 container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
                 return;
             }
 
-            if (filter === YEAR_FILTER_2025) {
+            if (filter === 'all') {
                 const groupedByYear = {};
                 filteredTournaments.forEach(tournament => {
                     if (!groupedByYear[tournament.year]) {
@@ -2206,13 +2163,20 @@
             const currentYear = now.getFullYear();
             const currentMonth = now.getMonth() + 1;
 
-            let defaultFilter = YEAR_FILTER_2025;
+            let defaultFilter = 'all';
 
-            if (currentYear === 2026) {
-                if (currentMonth === 1) {
-                    defaultFilter = '2026-1';
-                } else if (currentMonth >= 2) {
-                    defaultFilter = '2026-2';
+            const currentMonthTournaments = tournaments.filter(t => t.year === currentYear && t.month === currentMonth);
+            if (currentMonthTournaments.length > 0) {
+                defaultFilter = `${currentYear}-${currentMonth}`;
+            } else {
+                const futureTournaments = tournaments.filter(t => t.year > currentYear || (t.year === currentYear && t.month > currentMonth));
+                if (futureTournaments.length > 0) {
+                    futureTournaments.sort((a, b) => {
+                        if (a.year !== b.year) return a.year - b.year;
+                        return a.month - b.month;
+                    });
+                    const nearest = futureTournaments[0];
+                    defaultFilter = `${nearest.year}-${nearest.month}`;
                 }
             }
 
@@ -2240,4 +2204,3 @@
     </script>
 </body>
 </html>
-
