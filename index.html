@@ -2016,7 +2016,7 @@
             return { start: 1, end: 1 };
         }
 
-        function addTournamentStructuredData(tournament) {
+        function buildTournamentStructuredData(tournament) {
             const { start, end } = determineDateRange(tournament);
             const startDate = buildIsoDate(tournament.year, tournament.month, start);
             const endDate = buildIsoDate(tournament.year, tournament.month, end);
@@ -2063,9 +2063,17 @@
                 structuredData.offers = offer;
             }
 
+            return structuredData;
+        }
+
+        function injectStructuredData(tournaments) {
+            const graph = tournaments.map(buildTournamentStructuredData);
             const script = document.createElement('script');
             script.type = 'application/ld+json';
-            script.text = JSON.stringify(structuredData);
+            script.text = JSON.stringify({
+                "@context": "https://schema.org",
+                "@graph": graph
+            });
             document.head.appendChild(script);
         }
 
@@ -2097,8 +2105,9 @@
             `;
 
             container.appendChild(card);
-            addTournamentStructuredData(tournament);
         }
+
+        injectStructuredData(tournaments);
 
         const YEAR_FILTER_2025 = '2025-all';
 
