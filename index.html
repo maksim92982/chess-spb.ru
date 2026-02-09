@@ -1998,15 +1998,49 @@
             return 999;
         }
 
+        function buildIsoDate(year, month, day) {
+            const mm = month.toString().padStart(2, '0');
+            const dd = day.toString().padStart(2, '0');
+            return `${year}-${mm}-${dd}`;
+        }
+
+        function determineDateRange(tournament) {
+            const rangeMatch = tournament.date.match(/(\d+)\s*[-–]\s*(\d+)/);
+            if (rangeMatch) {
+                return {
+                    start: parseInt(rangeMatch[1], 10),
+                    end: parseInt(rangeMatch[2], 10)
+                };
+            }
+
+            const days = tournament.date.match(/\d+/g);
+            if (days && days.length) {
+                const firstDay = parseInt(days[0], 10);
+                return { start: firstDay, end: firstDay };
+            }
+
+            return { start: 1, end: 1 };
+        }
+
         function addTournamentStructuredData(tournament) {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify({
+            const { start, end } = determineDateRange(tournament);
+            const startDate = buildIsoDate(tournament.year, tournament.month, start);
+            const endDate = buildIsoDate(tournament.year, tournament.month, end);
+            const groups = (tournament.groups || []).join(', ');
+            const priceMatch = tournament.fee ? tournament.fee.match(/(\d+)/) : null;
+            const offer = priceMatch ? {
+                "@type": "Offer",
+                "price": parseFloat(priceMatch[1]),
+                "priceCurrency": "RUB",
+                "url": tournament.link
+            } : null;
+
+            const structuredData = {
                 "@context": "https://schema.org",
                 "@type": "SportsEvent",
                 "name": tournament.name,
-                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
-                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
+                "startDate": startDate,
+                "endDate": endDate,
                 "eventStatus": "https://schema.org/EventScheduled",
                 "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                 "location": {
@@ -2018,13 +2052,26 @@
                         "addressCountry": "RU"
                     }
                 },
-                "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
+                "description": `Шахматный турнир: ${tournament.format}. ${groups}`,
                 "organizer": {
                     "@type": "Organization",
-                    "name": tournament.name,
+                    "name": tournament.organizer || "Детские шахматные турниры СПб",
                     "url": tournament.link
+                },
+                "image": tournament.image || "https://chess-spb.ru/logo.jpg",
+                "performer": {
+                    "@type": "Organization",
+                    "name": tournament.organizer || "Детские шахматные турниры СПб"
                 }
-            });
+            };
+
+            if (offer) {
+                structuredData.offers = offer;
+            }
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify(structuredData);
             document.head.appendChild(script);
         }
 
