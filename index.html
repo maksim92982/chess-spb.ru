@@ -364,9 +364,22 @@
         }
 
         .year-header {
-    grid-column: 1 / -1;
-    margin-bottom: 1.5rem;
-}
+            grid-column: 1 / -1;
+            margin-bottom: 1.5rem;
+        }
+
+        .month-header {
+            grid-column: 1 / -1;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .month-header h3 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            padding-left: 1rem;
+            border-left: 4px solid var(--accent);
+            margin: 0;
+        }
 
         @media (max-width: 768px) {
             .tournament-list {
@@ -1976,7 +1989,20 @@
     
 
 
-        // Функция для добавления структурированных данных турнира
+        function extractDayFromDate(dateString) {
+            const match = dateString.match(/(\d+)/);
+            if (match) {
+                return parseInt(match[1], 10);
+            }
+
+            const rangeMatch = dateString.match(/(\d+)\s*[-–]\s*\d+/);
+            if (rangeMatch) {
+                return parseInt(rangeMatch[1], 10);
+            }
+
+            return 999;
+        }
+
         function addTournamentStructuredData(tournament) {
             const script = document.createElement('script');
             script.type = 'application/ld+json';
@@ -2007,72 +2033,134 @@
             document.head.appendChild(script);
         }
 
+        function createTournamentCard(tournament, container) {
+            const card = document.createElement('div');
+            card.className = 'tournament-card';
+            card.setAttribute('data-year', tournament.year);
+
+            let groupsHTML = '';
+            (tournament.groups || []).forEach(group => {
+                groupsHTML += `<p>• ${group}</p>`;
+            });
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3>${tournament.name}</h3>
+                    <p>${tournament.location || 'Санкт-Петербург'}</p>
+                </div>
+                <div class="card-body">
+                    <div class="tournament-info">
+                        <p><span class="info-label">Дата:</span> ${tournament.date}</p>
+                        <p><span class="info-label">Формат:</span> ${tournament.format}</p>
+                        <p><span class="info-label">Группы:</span></p>
+                        ${groupsHTML}
+                        <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
+                    </div>
+                    <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
+                </div>
+            `;
+
+            container.appendChild(card);
+            addTournamentStructuredData(tournament);
+        }
+
+        function getMonthName(monthNumber) {
+            const months = [
+                'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+            ];
+            return months[monthNumber - 1] || '';
+        }
+
         function displayTournaments(filter = 'all') {
             const container = document.getElementById('tournamentContainer');
             container.innerHTML = '';
-    
+
             let filteredTournaments = tournaments;
+
             if (filter !== 'all') {
                 const [year, month] = filter.split('-').map(Number);
                 filteredTournaments = tournaments.filter(t => t.year === year && t.month === month);
+
+                filteredTournaments.sort((a, b) => {
+                    const dayA = extractDayFromDate(a.date);
+                    const dayB = extractDayFromDate(b.date);
+
+                    if (dayA !== dayB) {
+                        return dayA - dayB;
+                    }
+
+                    return a.name.localeCompare(b.name, 'ru');
+                });
+            } else {
+                filteredTournaments.sort((a, b) => {
+                    if (a.year !== b.year) {
+                        return a.year - b.year;
+                    }
+                    if (a.month !== b.month) {
+                        return a.month - b.month;
+                    }
+                    const dayA = extractDayFromDate(a.date);
+                    const dayB = extractDayFromDate(b.date);
+                    if (dayA !== dayB) {
+                        return dayA - dayB;
+                    }
+                    return a.name.localeCompare(b.name, 'ru');
+                });
             }
-    
+
             if (filteredTournaments.length === 0) {
                 container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
                 return;
             }
-    
-            const groupedByYear = {};
-            filteredTournaments.forEach(tournament => {
-                if (!groupedByYear[tournament.year]) {
-                    groupedByYear[tournament.year] = [];
-                }
-                groupedByYear[tournament.year].push(tournament);
-            });
-    
-            const sortedYears = Object.keys(groupedByYear).map(Number).sort((a, b) => a - b);
-            sortedYears.forEach(year => {
-                const yearHeader = document.createElement('div');
-                yearHeader.className = 'year-header';
-                yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">Турниры ${year} года</h2>`;
-                container.appendChild(yearHeader);
-    
-                groupedByYear[year].sort((a, b) => {
-                    if (a.month !== b.month) {
-                        return a.month - b.month;
+
+            if (filter === 'all') {
+                const groupedByYear = {};
+                filteredTournaments.forEach(tournament => {
+                    if (!groupedByYear[tournament.year]) {
+                        groupedByYear[tournament.year] = {};
                     }
-                    return a.name.localeCompare(b.name, 'ru');
-                }).forEach(tournament => {
-                    const card = document.createElement('div');
-                    card.className = 'tournament-card';
-                    card.setAttribute('data-year', tournament.year);
-    
-                    let groupsHTML = '';
-                    (tournament.groups || []).forEach(group => {
-                        groupsHTML += `<p>• ${group}</p>`;
-                    });
-    
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <h3>${tournament.name}</h3>
-                            <p>${tournament.location || 'Санкт-Петербург'}</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="tournament-info">
-                                <p><span class="info-label">Дата:</span> ${tournament.date}</p>
-                                <p><span class="info-label">Формат:</span> ${tournament.format}</p>
-                                <p><span class="info-label">Группы:</span></p>
-                                ${groupsHTML}
-                                <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
-                            </div>
-                            <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
-                        </div>
-                    `;
-    
-                    container.appendChild(card);
-                    addTournamentStructuredData(tournament);
+                    if (!groupedByYear[tournament.year][tournament.month]) {
+                        groupedByYear[tournament.year][tournament.month] = [];
+                    }
+                    groupedByYear[tournament.year][tournament.month].push(tournament);
                 });
-            });
+
+                const sortedYears = Object.keys(groupedByYear).map(Number).sort((a, b) => a - b);
+
+                sortedYears.forEach(year => {
+                    const yearHeader = document.createElement('div');
+                    yearHeader.className = 'year-header';
+                    yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">Турниры ${year} года</h2>`;
+                    container.appendChild(yearHeader);
+
+                    const sortedMonths = Object.keys(groupedByYear[year]).map(Number).sort((a, b) => a - b);
+
+                    sortedMonths.forEach(month => {
+                        const monthName = getMonthName(month);
+                        const monthHeader = document.createElement('div');
+                        monthHeader.className = 'month-header';
+                        monthHeader.innerHTML = `<h3>${monthName}</h3>`;
+                        container.appendChild(monthHeader);
+
+                        groupedByYear[year][month].forEach(tournament => {
+                            createTournamentCard(tournament, container);
+                        });
+                    });
+                });
+            } else {
+                const [year, month] = filter.split('-').map(Number);
+                const monthName = getMonthName(month);
+
+                const monthHeader = document.createElement('div');
+                monthHeader.className = 'month-header';
+                monthHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary);">Турниры ${monthName} ${year} года</h2>`;
+                container.appendChild(monthHeader);
+
+                filteredTournaments.forEach(tournament => {
+                    createTournamentCard(tournament, container);
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -2121,5 +2209,4 @@
     </script>
 </body>
 </html>
-
 
