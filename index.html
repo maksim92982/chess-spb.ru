@@ -252,17 +252,19 @@
         
         .btn {
             display: inline-block;
-            background-color: var(--secondary);
+            background: linear-gradient(135deg, #2c3e50, #5e7fa3);
             color: white;
             padding: 0.6rem 1.2rem;
             border-radius: 4px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
         }
-        
+
         .btn:hover {
-            background-color: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(44, 62, 80, 0.25);
         }
         
         footer {
@@ -280,23 +282,21 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        
+
         .month-btn {
-            background-color: white;
-            border: 1px solid var(--secondary);
+            background-color: #f0f4f8;
+            border: 1px solid #aec7e8;
+            color: #2c3e50;
             padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-        
-        .month-btn.active {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
+
+        .month-btn.active,
         .month-btn:hover {
-            background-color: var(--secondary);
+            background: linear-gradient(135deg, #2c3e50, #5e7fa3);
+            border-color: #2c3e50;
             color: white;
         }
         
