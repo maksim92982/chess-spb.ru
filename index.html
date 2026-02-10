@@ -1994,6 +1994,30 @@
             return 999;
         }
 
+        function buildIsoDate(year, month, day) {
+            const mm = month.toString().padStart(2, '0');
+            const dd = day.toString().padStart(2, '0');
+            return `${year}-${mm}-${dd}`;
+        }
+
+        function determineDateRange(tournament) {
+            const rangeMatch = tournament.date.match(/(\d+)\s*[-–]\s*(\d+)/);
+            if (rangeMatch) {
+                return {
+                    start: parseInt(rangeMatch[1], 10),
+                    end: parseInt(rangeMatch[2], 10)
+                };
+            }
+
+            const days = tournament.date.match(/\d+/g);
+            if (days && days.length) {
+                const firstDay = parseInt(days[0], 10);
+                return { start: firstDay, end: firstDay };
+            }
+
+            return { start: 1, end: 1 };
+        }
+
         function addTournamentStructuredData(tournament) {
             const { start, end } = determineDateRange(tournament);
             const startDate = buildIsoDate(tournament.year, tournament.month, start);
