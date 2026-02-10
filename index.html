@@ -1994,6 +1994,36 @@
             return 999;
         }
 
+        function buildTournamentStructuredData(tournament) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "SportsEvent",
+                "name": tournament.name,
+                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
+                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
+                "eventStatus": "https://schema.org/EventScheduled",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "location": {
+                    "@type": "Place",
+                    "name": tournament.location || "Санкт-Петербург",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "addressLocality": "Санкт-Петербург",
+                        "addressCountry": "RU"
+                    }
+                },
+                "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
+                "organizer": {
+                    "@type": "Organization",
+                    "name": tournament.name,
+                    "url": tournament.link
+                }
+            });
+            document.head.appendChild(script);
+        }
+
         function createTournamentCard(tournament, container) {
             const card = document.createElement('div');
             card.className = 'tournament-card';
@@ -2022,7 +2052,7 @@
             `;
 
             container.appendChild(card);
-            addTournamentStructuredData(tournament);
+            buildTournamentStructuredData(tournament);
         }
 
         function getMonthName(monthNumber) {
