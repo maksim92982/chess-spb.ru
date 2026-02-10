@@ -1994,15 +1994,28 @@
             return 999;
         }
 
-        function buildTournamentStructuredData(tournament) {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify({
+        function addTournamentStructuredData(tournament) {
+            const { start, end } = determineDateRange(tournament);
+            const startDate = buildIsoDate(tournament.year, tournament.month, start);
+            const endDate = buildIsoDate(tournament.year, tournament.month, end);
+            const groups = (tournament.groups || []).join(', ');
+            const priceNumbers = tournament.fee ? tournament.fee.match(/(\d+)/g) : null;
+            const offer = priceNumbers
+                ? {
+                    "@type": "Offer",
+                    "price": parseFloat(priceNumbers[0]),
+                    "priceCurrency": "RUB",
+                    "url": tournament.link,
+                    "availability": "https://schema.org/InStock"
+                }
+                : null;
+
+            const structuredData = {
                 "@context": "https://schema.org",
                 "@type": "SportsEvent",
                 "name": tournament.name,
-                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
-                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
+                "startDate": startDate,
+                "endDate": endDate,
                 "eventStatus": "https://schema.org/EventScheduled",
                 "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                 "location": {
@@ -2014,13 +2027,26 @@
                         "addressCountry": "RU"
                     }
                 },
-                "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
+                "description": `Шахматный турнир: ${tournament.format}. ${groups}`,
                 "organizer": {
                     "@type": "Organization",
-                    "name": tournament.name,
+                    "name": tournament.organizer || "Детские шахматные турниры СПб",
                     "url": tournament.link
-                }
-            });
+                },
+                "performer": {
+                    "@type": "Organization",
+                    "name": tournament.organizer || "Детские шахматные турниры СПб"
+                },
+                "image": tournament.image || "https://chess-spb.ru/logo.jpg"
+            };
+
+            if (offer) {
+                structuredData.offers = offer;
+            }
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify(structuredData);
             document.head.appendChild(script);
         }
 
@@ -2052,7 +2078,7 @@
             `;
 
             container.appendChild(card);
-            buildTournamentStructuredData(tournament);
+            addTournamentStructuredData(tournament);
         }
 
         function getMonthName(monthNumber) {
