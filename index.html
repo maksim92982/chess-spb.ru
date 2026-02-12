@@ -438,6 +438,8 @@
             <button class="month-btn" data-filter="2025-all">2025</button>
             <button class="month-btn" data-filter="2026-1">Январь 2026</button>
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
+            <button class="month-btn" data-filter="format-rapid">⚡ Рапид</button>
+            <button class="month-btn" data-filter="format-blitz">🔥 Блиц</button>
         </div>
         
         <div class="tournament-list" id="tournamentContainer">
@@ -1980,6 +1982,14 @@
 
         const YEAR_FILTER_2025 = '2025-all';
 
+        function filterByFormat(format) {
+            const searchTerm = format === 'format-rapid' ? 'рапид' : 'блиц';
+            return tournaments.filter(t =>
+                t.format.toLowerCase().includes(searchTerm) ||
+                (t.groups || []).some(g => g.toLowerCase().includes(searchTerm))
+            );
+        }
+
         function extractDayFromDate(dateString) {
             const match = dateString.match(/(\d+)/);
             if (match) {
@@ -2109,7 +2119,9 @@
 
             let filteredTournaments = tournaments;
 
-            if (filter === YEAR_FILTER_2025) {
+            if (filter === 'format-rapid' || filter === 'format-blitz') {
+                filteredTournaments = filterByFormat(filter);
+            } else if (filter === YEAR_FILTER_2025) {
                 filteredTournaments = tournaments.filter(t => t.year === 2025);
             } else {
                 const [year, month] = filter.split('-').map(Number);
