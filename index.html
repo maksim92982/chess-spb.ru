@@ -2317,21 +2317,23 @@
             const formatButtons = document.querySelectorAll('.format-filter .format-btn');
 
             const setActiveButtons = () => {
-                monthButtons.forEach(button => {
-                    if (button.dataset.filter === currentMonthFilter) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                });
-                formatButtons.forEach(button => {
-                    if (button.dataset.format === currentFormatFilter) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                });
-            };
+    monthButtons.forEach(button => {
+        if (button.dataset.filter === currentMonthFilter) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+    
+    formatButtons.forEach(button => {
+        // ✅ ТЕПЕРЬ РАБОТАЕТ ПРАВИЛЬНО!
+        if (currentFormatFilter !== null && button.dataset.format === currentFormatFilter) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+};
 
             setActiveButtons();
             displayTournaments(currentMonthFilter, currentFormatFilter);
