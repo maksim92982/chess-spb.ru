@@ -438,8 +438,11 @@
             <button class="month-btn" data-filter="2025-all">2025</button>
             <button class="month-btn" data-filter="2026-1">Январь 2026</button>
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
-            <button class="month-btn" data-filter="format-rapid">⚡ Рапид</button>
-            <button class="month-btn" data-filter="format-blitz">🔥 Блиц</button>
+        </div>
+        <div class="month-filter format-filter">
+            <button class="month-btn format-btn" data-format="format-rapid">Рапид</button>
+            <button class="month-btn format-btn" data-format="format-blitz">Блиц</button>
+            <button class="month-btn format-btn" data-format="format-classic">Классика</button>
         </div>
         
         <div class="tournament-list" id="tournamentContainer">
@@ -1981,11 +1984,21 @@
 
 
         const YEAR_FILTER_2025 = '2025-all';
+        let currentMonthFilter = YEAR_FILTER_2025;
+        let currentFormatFilter = null;
 
-        function filterByFormat(format) {
-            const searchTerm = format === 'format-rapid' ? 'рапид' : 'блиц';
-            return tournaments.filter(t =>
-                t.format.toLowerCase().includes(searchTerm) ||
+        function filterByFormat(sourceList, format) {
+            const termMap = {
+                'format-rapid': 'рапид',
+                'format-blitz': 'блиц',
+                'format-classic': 'классика'
+            };
+            const searchTerm = termMap[format];
+            if (!searchTerm) {
+                return sourceList;
+            }
+            return sourceList.filter(t =>
+                (t.format || '').toLowerCase().includes(searchTerm) ||
                 (t.groups || []).some(g => g.toLowerCase().includes(searchTerm))
             );
         }
@@ -2113,19 +2126,21 @@
             return months[monthNumber - 1] || '';
         }
 
-        function displayTournaments(filter = YEAR_FILTER_2025) {
+        function displayTournaments(filter = YEAR_FILTER_2025, format = null) {
             const container = document.getElementById('tournamentContainer');
             container.innerHTML = '';
 
             let filteredTournaments = tournaments;
 
-            if (filter === 'format-rapid' || filter === 'format-blitz') {
-                filteredTournaments = filterByFormat(filter);
-            } else if (filter === YEAR_FILTER_2025) {
+            if (filter === YEAR_FILTER_2025) {
                 filteredTournaments = tournaments.filter(t => t.year === 2025);
             } else {
                 const [year, month] = filter.split('-').map(Number);
                 filteredTournaments = tournaments.filter(t => t.year === year && t.month === month);
+            }
+
+            if (format) {
+                filteredTournaments = filterByFormat(filteredTournaments, format);
             }
 
             filteredTournaments.sort((a, b) => {
@@ -2193,36 +2208,59 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
-            let defaultFilter = YEAR_FILTER_2025;
             if (now.getFullYear() === 2026) {
                 const month = now.getMonth() + 1;
                 if (month === 1) {
-                    defaultFilter = '2026-1';
+                    currentMonthFilter = '2026-1';
                 } else if (month === 2) {
-                    defaultFilter = '2026-2';
+                    currentMonthFilter = '2026-2';
                 } else if (tournaments.some(t => t.year === 2026 && t.month === 2)) {
-                    defaultFilter = '2026-2';
+                    currentMonthFilter = '2026-2';
                 }
             }
 
-            console.log(`Будем показывать: ${defaultFilter}`);
+            const monthButtons = document.querySelectorAll('#tournaments .month-btn');
+            const formatButtons = document.querySelectorAll('.format-filter .format-btn');
 
-            const monthButtons = document.querySelectorAll('.month-btn');
+            const setActiveButtons = () => {
+                monthButtons.forEach(button => {
+                    if (button.dataset.filter === currentMonthFilter) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+                formatButtons.forEach(button => {
+                    if (button.dataset.format === currentFormatFilter) {
+                        button.classList.add('active');
+                    } else {
+                        button.classList.remove('active');
+                    }
+                });
+            };
+
+            setActiveButtons();
+            displayTournaments(currentMonthFilter, currentFormatFilter);
+
             monthButtons.forEach(button => {
-                if (button.dataset.filter === defaultFilter) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
+                if (!button.dataset.filter) return;
+                button.addEventListener('click', () => {
+                    currentMonthFilter = button.dataset.filter;
+                    currentFormatFilter = null;
+                    setActiveButtons();
+                    displayTournaments(currentMonthFilter, currentFormatFilter);
+                });
             });
 
-            displayTournaments(defaultFilter);
-
-            monthButtons.forEach(button => {
+            formatButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    monthButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    displayTournaments(button.dataset.filter);
+                    if (currentFormatFilter === button.dataset.format) {
+                        currentFormatFilter = null;
+                    } else {
+                        currentFormatFilter = button.dataset.format;
+                    }
+                    setActiveButtons();
+                    displayTournaments(currentMonthFilter, currentFormatFilter);
                 });
             });
         });
