@@ -2525,6 +2525,117 @@
                 });
             });
         });
+
+    // Функция для проверки загрузки турниров
+    function checkTournamentsLoaded() {
+        const container = document.getElementById('tournamentContainer');
+        const logDiv = document.createElement('div');
+        logDiv.style.cssText = `
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.9);
+            color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: left;
+            pointer-events: none;
+        `;
+        
+        // Функция для обновления лога
+        function updateLog(message, isError = false) {
+            logDiv.innerHTML = `
+                <div style="color: ${isError ? '#ff6b6b' : '#4caf50'}; font-weight: bold; margin-bottom: 8px;">
+                    ${isError ? '❌ Ошибка' : '✅ Успешно'}
+                </div>
+                <div style="margin-bottom: 8px;">${message}</div>
+                <div style="font-size: 12px; color: #aaa; border-top: 1px solid #333; padding-top: 8px;">
+                    ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+        }
+
+        // Проверяем наличие турниров каждые 2 секунды (максимум 10 попыток)
+        let attempts = 0;
+        const maxAttempts = 10;
+        
+        const checkInterval = setInterval(() => {
+            attempts++;
+            
+            // Проверяем, есть ли карточки турниров
+            const tournamentCards = container.querySelectorAll('.tournament-card');
+            const hasTournaments = tournamentCards.length > 0;
+            const hasErrorMessage = container.querySelector('.no-tournaments') !== null;
+            
+            if (hasTournaments) {
+                // Турниры успешно загружены
+                updateLog(`Загружено турниров: ${tournamentCards.length}\nФильтр: ${currentMonthFilter || 'все'}\nФормат: ${currentFormatFilter || 'все'}`);
+                clearInterval(checkInterval);
+                
+                // Удаляем лог через 3 секунды при успехе
+                setTimeout(() => {
+                    if (logDiv.parentNode) {
+                        logDiv.remove();
+                    }
+                }, 3000);
+                
+            } else if (hasErrorMessage) {
+                // Есть сообщение об отсутствии турниров (это нормально)
+                updateLog('Турниров на выбранный месяц нет', false);
+                clearInterval(checkInterval);
+                
+                setTimeout(() => {
+                    if (logDiv.parentNode) {
+                        logDiv.remove();
+                    }
+                }, 3000);
+                
+            } else if (attempts >= maxAttempts) {
+                // Турниры не загрузились после всех попыток
+                updateLog(`Турниры НЕ загрузились за ${maxAttempts} попыток\n\nВозможные причины:\n• Проблемы с интернетом\n• Ошибка в JavaScript\n• Конфликт скриптов`, true);
+                clearInterval(checkInterval);
+                
+                // Добавляем кнопку для перезагрузки
+                const reloadButton = document.createElement('button');
+                reloadButton.textContent = '🔄 Перезагрузить страницу';
+                reloadButton.style.cssText = `
+                    background: #4caf50;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    margin-top: 10px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    width: 100%;
+                    pointer-events: auto;
+                `;
+                reloadButton.onclick = () => location.reload();
+                logDiv.appendChild(reloadButton);
+            }
+        }, 2000); // Проверка каждые 2 секунды
+        
+        // Добавляем лог на страницу
+        document.body.appendChild(logDiv);
+        
+        // Показываем начальное состояние
+        updateLog('Проверка загрузки турниров...', false);
+    }
+
+    // Запускаем проверку после загрузки страницы
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkTournamentsLoaded);
+    } else {
+        checkTournamentsLoaded();
+    }
+
     </script>
     <!-- Для быстрой индексации фильтров -->
 <div style="display: none;">
@@ -2535,5 +2646,6 @@
     <a href="/#2026-3">Турниры март 2026 СПб</a>
     
 </div>
+    
 </body>
 </html>
