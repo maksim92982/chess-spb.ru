@@ -397,6 +397,83 @@
                 font-size: 1.8rem;
             }
         }
+        /* Стили для всплывающих подсказок */
+.format-btn {
+    position: relative;
+}
+
+.format-btn[data-format="format-rapid"]:hover::after,
+.format-btn[data-format="format-blitz"]:hover::after,
+.format-btn[data-format="format-classic"]:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent var(--primary) transparent;
+    z-index: 100;
+}
+
+.format-btn[data-format="format-rapid"]:hover::before {
+    content: "⚡ Рапид (быстрые шахматы) — от 10 до 60 минут на партию";
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.format-btn[data-format="format-blitz"]:hover::before {
+    content: "⚡ Блиц (молниеносные шахматы) — до 10 минут на партию";
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.format-btn[data-format="format-classic"]:hover::before {
+    content: "♟️ Классика (классические шахматы) — более 60 минут на партию";
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--primary);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* Для мобильных устройств - отключаем подсказки */
+@media (max-width: 768px) {
+    .format-btn:hover::before,
+    .format-btn:hover::after {
+        display: none !important;
+    }
+}
     </style>
 </head>
 <body>
