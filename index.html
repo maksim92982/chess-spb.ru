@@ -2323,7 +2323,47 @@
                 });
             }
         }
+function getTournamentStartDate(t) {
+  const day = extractDayFromDate(t.date);
+  // если день не распарсился — уедет в конец
+  if (!Number.isFinite(day)) return new Date(3000, 0, 1);
+  return new Date(t.year, t.month - 1, day);
+}
 
+function getPrioritizedTournaments(limit = 12) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return tournaments
+    .map(t => ({ ...t, _start: getTournamentStartDate(t) }))
+    // показываем ближайшие и будущие (сегодня тоже)
+    .filter(t => t._start >= today)
+    .sort((a, b) => a._start - b._start)
+    .slice(0, limit);
+}
+
+function displayPrioritizedTournaments() {
+  const container = document.getElementById('tournamentContainer');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  const list = getPrioritizedTournaments(12);
+
+  if (!list.length) {
+    container.innerHTML =
+      '<div class="no-tournaments"><p>Ближайших турниров пока нет. Проверьте позже!</p></div>';
+    return;
+  }
+
+  const header = document.createElement('div');
+  header.className = 'month-header';
+  header.innerHTML =
+    '<h2 style="text-align:center; margin: 1.5rem 0; color: var(--primary);">Ближайшие турниры</h2>';
+  container.appendChild(header);
+
+  list.forEach(t => createTournamentCard(t, container));
+}
         document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM_READY');
 
@@ -2331,14 +2371,12 @@
 
   // ✅ Мобилка: только prioritized, без обычного displayTournaments
   if (window.innerWidth <= 768) {
-    console.log('MOBILE_MODE');
+  console.log('MOBILE_MODE');
+  monthButtons.forEach(btn => btn.classList.remove('active'));
 
-    // можно поставить active на 2025 или на текущий месяц — как хочешь
-    monthButtons.forEach(btn => btn.classList.remove('active'));
-
-    displayPrioritizedTournaments(); // <-- вызовем сразу
-    return;
-  }
+  displayPrioritizedTournaments(); // стартовая выдача на мобилке
+  // НЕ return;  <-- убрали, чтобы ниже навесились клики
+}
 
   // ✅ Десктоп: обычная логика как была
   const now = new Date();
