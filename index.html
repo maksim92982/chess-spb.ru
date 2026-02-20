@@ -2244,410 +2244,185 @@
     
 
 
-        const YEAR_FILTER_2025 = '2025-all';
-        let currentMonthFilter = YEAR_FILTER_2025;
-        let currentFormatFilter = null;
+       const YEAR_FILTER_2025 = '2025-all';
+    let currentMonthFilter = YEAR_FILTER_2025;
+    let currentFormatFilter = null;
 
-        function filterByFormat(sourceList, format) {
-            const termMap = {
-                'format-rapid': 'рапид',
-                'format-blitz': 'блиц',
-                'format-classic': 'классика'
-            };
-            const searchTerm = termMap[format];
-            if (!searchTerm) {
-                return sourceList;
-            }
-            return sourceList.filter(t =>
-                (t.format || '').toLowerCase().includes(searchTerm) ||
-                (t.groups || []).some(g => g.toLowerCase().includes(searchTerm))
-            );
-        }
+    function filterByFormat(sourceList, format) {
+        const termMap = {
+            'format-rapid': 'рапид',
+            'format-blitz': 'блиц',
+            'format-classic': 'классика'
+        };
+        const searchTerm = termMap[format];
+        if (!searchTerm) return sourceList;
+        return sourceList.filter(t =>
+            (t.format || '').toLowerCase().includes(searchTerm) ||
+            (t.groups || []).some(g => g.toLowerCase().includes(searchTerm))
+        );
+    }
 
-        function extractDayFromDate(dateString) {
-            const match = dateString.match(/(\d+)/);
-            if (match) {
-                return parseInt(match[1], 10);
-            }
+    function extractDayFromDate(dateString) {
+        const match = dateString.match(/(\d+)/);
+        return match ? parseInt(match[1], 10) : 999;
+    }
 
-            const rangeMatch = dateString.match(/(\d+)\s*[-–]\s*\d+/);
-            if (rangeMatch) {
-                return parseInt(rangeMatch[1], 10);
-            }
+    function extractEndDayFromDate(dateString) {
+        const rangeMatch = dateString.match(/(\d+)\s*[-–]\s*(\d+)/);
+        if (rangeMatch) return parseInt(rangeMatch[2], 10).toString().padStart(2, '0');
+        const dayMatch = dateString.match(/(\d+)/);
+        return dayMatch ? parseInt(dayMatch[1], 10).toString().padStart(2, '0') : '01';
+    }
 
-            return 999;
-        }
-
-        function extractEndDayFromDate(dateString) {
-            const rangeMatch = dateString.match(/(\d+)\s*[-–]\s*(\d+)/);
-            if (rangeMatch) {
-                return parseInt(rangeMatch[2], 10).toString().padStart(2, '0');
-            }
-
-            const dayMatch = dateString.match(/(\d+)/);
-            return dayMatch ? parseInt(dayMatch[1], 10).toString().padStart(2, '0') : '01';
-        }
-
-
-        function addTournamentStructuredData(tournament) {
-            const startDay = extractDayFromDate(tournament.date);
-            const padMonth = tournament.month.toString().padStart(2, '0');
-            const padStartDay = startDay.toString().padStart(2, '0');
-            const endDay = extractEndDayFromDate(tournament.date);
-            const startDate = `${tournament.year}-${padMonth}-${padStartDay}`;
-            const endDate = `${tournament.year}-${padMonth}-${endDay}`;
-            const groups = (tournament.groups || []).join(', ');
-            const priceNumbers = tournament.fee ? tournament.fee.match(/(\d+)/g) : null;
-            const offer = priceNumbers
-                ? {
-                    "@type": "Offer",
-                    "price": parseFloat(priceNumbers[0]),
-                    "priceCurrency": "RUB",
-                    "url": tournament.link,
-                    "availability": "https://schema.org/InStock"
+    function addTournamentStructuredData(tournament) {
+        const startDay = extractDayFromDate(tournament.date);
+        const padMonth = tournament.month.toString().padStart(2, '0');
+        const padStartDay = startDay.toString().padStart(2, '0');
+        const endDay = extractEndDayFromDate(tournament.date);
+        const startDate = `${tournament.year}-${padMonth}-${padStartDay}`;
+        const endDate = `${tournament.year}-${padMonth}-${endDay}`;
+        
+        const structuredData = {
+            "@context": "https://schema.org",
+            "@type": "SportsEvent",
+            "name": tournament.name,
+            "startDate": startDate,
+            "endDate": endDate,
+            "location": {
+                "@type": "Place",
+                "name": tournament.location || "Санкт-Петербург",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Санкт-Петербург",
+                    "addressCountry": "RU"
                 }
-                : null;
-
-            const structuredData = {
-                "@context": "https://schema.org",
-                "@type": "SportsEvent",
-                "name": tournament.name,
-                "startDate": startDate,
-                "endDate": endDate,
-                "eventStatus": "https://schema.org/EventScheduled",
-                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-                "location": {
-                    "@type": "Place",
-                    "name": tournament.location || "Санкт-Петербург",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "addressLocality": "Санкт-Петербург",
-                        "addressCountry": "RU"
-                    }
-                },
-                "description": `Шахматный турнир: ${tournament.format}. ${groups}`,
-                "organizer": {
-                    "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб",
-                    "url": tournament.link
-                },
-                "performer": {
-                    "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб"
-                },
-                "image": tournament.image || "https://chess-spb.ru/logo.jpg"
-            };
-
-            if (offer) {
-                structuredData.offers = offer;
+            },
+            "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
+            "organizer": {
+                "@type": "Organization",
+                "name": "Детские шахматные турниры СПб",
+                "url": tournament.link
             }
+        };
 
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify(structuredData);
-            document.head.appendChild(script);
-        }
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(structuredData);
+        document.head.appendChild(script);
+    }
 
-        function createTournamentCard(tournament, container) {
-            const card = document.createElement('div');
-            card.className = 'tournament-card';
-            card.setAttribute('data-year', tournament.year);
+    function createTournamentCard(tournament, container) {
+        const card = document.createElement('div');
+        card.className = 'tournament-card';
+        
+        let groupsHTML = '';
+        (tournament.groups || []).forEach(group => {
+            groupsHTML += `<p>• ${group}</p>`;
+        });
 
-            let groupsHTML = '';
-            (tournament.groups || []).forEach(group => {
-                groupsHTML += `<p>• ${group}</p>`;
-            });
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem;">${tournament.name}</h2>
-                    <p>${tournament.location || 'Санкт-Петербург'}</p>
+        card.innerHTML = `
+            <div class="card-header">
+                <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem;">${tournament.name}</h2>
+                <p>${tournament.location || 'Санкт-Петербург'}</p>
+            </div>
+            <div class="card-body">
+                <div class="tournament-info">
+                    <p><span class="info-label">Дата:</span> ${tournament.date}</p>
+                    <p><span class="info-label">Формат:</span> ${tournament.format}</p>
+                    <p><span class="info-label">Группы:</span></p>
+                    ${groupsHTML}
+                    <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте'}</p>
                 </div>
-                <div class="card-body">
-                    <div class="tournament-info">
-                        <p><span class="info-label">Дата:</span> ${tournament.date}</p>
-                        <p><span class="info-label">Формат:</span> ${tournament.format}</p>
-                        <p><span class="info-label">Группы:</span></p>
-                        ${groupsHTML}
-                        <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
-                    </div>
-                    <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
-                </div>
-            `;
+                <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
+            </div>
+        `;
 
-            container.appendChild(card);
-            addTournamentStructuredData(tournament);
+        container.appendChild(card);
+        addTournamentStructuredData(tournament);
+    }
+
+    function getMonthName(monthNumber) {
+        const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        return months[monthNumber - 1] || '';
+    }
+
+    function displayTournaments(filter = YEAR_FILTER_2025, format = null) {
+        const container = document.getElementById('tournamentContainer');
+        if (!container) return;
+        
+        container.innerHTML = '';
+
+        let filteredTournaments = tournaments;
+
+        if (filter === YEAR_FILTER_2025) {
+            filteredTournaments = tournaments.filter(t => t.year === 2025);
+        } else {
+            const [year, month] = filter.split('-').map(Number);
+            filteredTournaments = tournaments.filter(t => t.year === year && t.month === month);
         }
 
-        function getMonthName(monthNumber) {
-            const months = [
-                'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-                'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-            ];
-            return months[monthNumber - 1] || '';
+        if (format) {
+            filteredTournaments = filterByFormat(filteredTournaments, format);
         }
 
-        function displayTournaments(filter = YEAR_FILTER_2025, format = null) {
-            const container = document.getElementById('tournamentContainer');
-            container.innerHTML = '';
+        filteredTournaments.sort((a, b) => {
+            if (a.year !== b.year) return a.year - b.year;
+            if (a.month !== b.month) return a.month - b.month;
+            return extractDayFromDate(a.date) - extractDayFromDate(b.date);
+        });
 
-            let filteredTournaments = tournaments;
-
-            if (filter === YEAR_FILTER_2025) {
-                filteredTournaments = tournaments.filter(t => t.year === 2025);
-            } else {
-                const [year, month] = filter.split('-').map(Number);
-                filteredTournaments = tournaments.filter(t => t.year === year && t.month === month);
-            }
-
-            if (format) {
-                filteredTournaments = filterByFormat(filteredTournaments, format);
-            }
-
-            filteredTournaments.sort((a, b) => {
-                if (a.year !== b.year) return a.year - b.year;
-                if (a.month !== b.month) return a.month - b.month;
-                const dayA = extractDayFromDate(a.date);
-                const dayB = extractDayFromDate(b.date);
-                if (dayA !== dayB) return dayA - dayB;
-                return a.name.localeCompare(b.name, 'ru');
-            });
-
-            if (filteredTournaments.length === 0) {
-                container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
-                return;
-            }
-
-            if (filter === YEAR_FILTER_2025) {
-                const groupedByYear = {};
-                filteredTournaments.forEach(tournament => {
-                    if (!groupedByYear[tournament.year]) {
-                        groupedByYear[tournament.year] = {};
-                    }
-                    if (!groupedByYear[tournament.year][tournament.month]) {
-                        groupedByYear[tournament.year][tournament.month] = [];
-                    }
-                    groupedByYear[tournament.year][tournament.month].push(tournament);
-                });
-
-                const sortedYears = Object.keys(groupedByYear).map(Number).sort((a, b) => a - b);
-
-                sortedYears.forEach(year => {
-                    const yearHeader = document.createElement('div');
-                    yearHeader.className = 'year-header';
-                    yearHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem;">Турниры ${year} года</h2>`;
-                    container.appendChild(yearHeader);
-
-                    const sortedMonths = Object.keys(groupedByYear[year]).map(Number).sort((a, b) => a - b);
-
-                    sortedMonths.forEach(month => {
-                        const monthName = getMonthName(month);
-                        const monthHeader = document.createElement('div');
-                        monthHeader.className = 'month-header';
-                        monthHeader.innerHTML = `<h3>${monthName}</h3>`;
-                        container.appendChild(monthHeader);
-
-                        groupedByYear[year][month].forEach(tournament => {
-                            createTournamentCard(tournament, container);
-                        });
-                    });
-                });
-            } else {
-                const [year, month] = filter.split('-').map(Number);
-                const monthName = getMonthName(month);
-
-                const monthHeader = document.createElement('div');
-                monthHeader.className = 'month-header';
-                monthHeader.innerHTML = `<h2 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--primary);">Турниры ${monthName} ${year} года</h2>`;
-                container.appendChild(monthHeader);
-
-                filteredTournaments.forEach(tournament => {
-                    createTournamentCard(tournament, container);
-                });
-            }
+        if (filteredTournaments.length === 0) {
+            container.innerHTML = '<div class="no-tournaments"><p>На выбранный месяц турниров пока нет. Проверьте позже!</p></div>';
+            return;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const now = new Date();
-            if (now.getFullYear() === 2026) {
-                const month = now.getMonth() + 1;
-                if (month === 1) {
-                    currentMonthFilter = '2026-1';
-                } else if (month === 2) {
-                    currentMonthFilter = '2026-2';
-                } else if (tournaments.some(t => t.year === 2026 && t.month === 2)) {
-                    currentMonthFilter = '2026-2';
-                }
-            }
+        filteredTournaments.forEach(tournament => {
+            createTournamentCard(tournament, container);
+        });
+    }
 
-            const monthButtons = document.querySelectorAll('#tournaments .month-btn');
-            const formatButtons = document.querySelectorAll('.format-filter .format-btn');
+    document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        if (now.getFullYear() === 2026) {
+            const month = now.getMonth() + 1;
+            if (month === 1) currentMonthFilter = '2026-1';
+            else if (month === 2) currentMonthFilter = '2026-2';
+            else if (tournaments.some(t => t.year === 2026 && t.month === 2)) currentMonthFilter = '2026-2';
+        }
 
-            const setActiveButtons = () => {
-                monthButtons.forEach(button => {
-                    if (button.dataset.filter === currentMonthFilter) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                });
-                formatButtons.forEach(button => {
-                    if (button.dataset.format === currentFormatFilter) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                });
-            };
+        const monthButtons = document.querySelectorAll('#tournaments .month-btn');
+        const formatButtons = document.querySelectorAll('.format-filter .format-btn');
 
-            setActiveButtons();
-            displayTournaments(currentMonthFilter, currentFormatFilter);
-
+        const setActiveButtons = () => {
             monthButtons.forEach(button => {
-                if (!button.dataset.filter) return;
-                button.addEventListener('click', () => {
-                    currentMonthFilter = button.dataset.filter;
-                    currentFormatFilter = null;
-                    setActiveButtons();
-                    displayTournaments(currentMonthFilter, currentFormatFilter);
-                });
+                button.classList.toggle('active', button.dataset.filter === currentMonthFilter);
             });
-
             formatButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    if (currentFormatFilter === button.dataset.format) {
-                        currentFormatFilter = null;
-                    } else {
-                        currentFormatFilter = button.dataset.format;
-                    }
-                    setActiveButtons();
-                    displayTournaments(currentMonthFilter, currentFormatFilter);
-                });
+                button.classList.toggle('active', button.dataset.format === currentFormatFilter);
+            });
+        };
+
+        setActiveButtons();
+        displayTournaments(currentMonthFilter, currentFormatFilter);
+
+        monthButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (!button.dataset.filter) return;
+                currentMonthFilter = button.dataset.filter;
+                currentFormatFilter = null;
+                setActiveButtons();
+                displayTournaments(currentMonthFilter, currentFormatFilter);
             });
         });
 
-  // === ВРЕМЕННАЯ ОТЛАДКА ДЛЯ ТЕЛЕФОНА ===
-(function() {
-    // Создаем большой красный баннер в самом верху страницы
-    const debugBanner = document.createElement('div');
-    debugBanner.style.cssText = `
-        position: sticky;
-        top: 0;
-        left: 0;
-        right: 0;
-        background: #ff4444;
-        color: white;
-        padding: 15px;
-        font-size: 16px;
-        font-weight: bold;
-        text-align: center;
-        z-index: 999999;
-        border-bottom: 3px solid #cc0000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        font-family: Arial, sans-serif;
-        margin-bottom: 10px;
-    `;
-    
-    // Функция обновления баннера
-    function updateBanner(message, isError = true) {
-        debugBanner.innerHTML = `
-            <div style="margin-bottom: 5px;">🔧 РЕЖИМ ОТЛАДКИ</div>
-            <div style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px;">
-                ${message}
-            </div>
-            <div style="font-size: 12px; margin-top: 8px; color: #ffeeee;">
-                Время: ${new Date().toLocaleTimeString()}
-            </div>
-        `;
-        document.body.prepend(debugBanner);
-    }
-    
-    updateBanner('⏳ Проверка загрузки турниров...');
-    
-    // Проверяем каждую секунду и обновляем баннер
-    let attempts = 0;
-    const maxAttempts = 20;
-    
-    const interval = setInterval(() => {
-        attempts++;
-        
-        const container = document.getElementById('tournamentContainer');
-        const tournamentsCount = typeof tournaments !== 'undefined' ? tournaments.length : 'не определен';
-        
-        let status = '';
-        let details = '';
-        
-        // Проверяем наличие турниров
-        if (!container) {
-            status = '❌ ОШИБКА: Контейнер tournamentContainer не найден!';
-        } else {
-            const cards = container.querySelectorAll('.tournament-card');
-            const noTournamentsMsg = container.querySelector('.no-tournaments');
-            
-            details += `Контейнер: ✅ найден\n`;
-            details += `Карточек в DOM: ${cards.length}\n`;
-            details += `Всего турниров в данных: ${tournamentsCount}\n`;
-            details += `Текущий фильтр: ${currentMonthFilter}\n`;
-            details += `Текущий формат: ${currentFormatFilter}\n`;
-            
-            if (cards.length > 0) {
-                status = '✅ ТУРНИРЫ ЗАГРУЖЕНЫ!';
-                details += `\n✅ УСПЕХ: видно ${cards.length} турниров`;
-            } else if (noTournamentsMsg) {
-                status = 'ℹ️ Турниров нет за этот месяц';
-                details += `\n${noTournamentsMsg.textContent}`;
-            } else {
-                status = '⏳ Турниры еще загружаются...';
-            }
-            
-            // Проверяем наличие ошибок в консоли (имитация)
-            if (cards.length === 0 && attempts > 5) {
-                details += `\n\n⚠️ Возможные проблемы:
-• JavaScript не выполнился до конца
-• Конфликт с другими скриптами
-• Проблемы с интернетом на телефоне`;
-            }
-        }
-        
-        updateBanner(`${status}\n\n${details}`, status.includes('ОШИБКА'));
-        
-        // Если турниры загрузились, показываем баннер еще 5 секунд и убираем
-        if (container && container.querySelectorAll('.tournament-card').length > 0) {
-            setTimeout(() => {
-                debugBanner.style.transition = 'opacity 1s';
-                debugBanner.style.opacity = '0';
-                setTimeout(() => debugBanner.remove(), 1000);
-            }, 5000);
-            clearInterval(interval);
-        }
-        
-        // Если слишком много попыток, оставляем баннер навсегда
-        if (attempts >= maxAttempts) {
-            updateBanner(`❌ НЕ УДАЛОСЬ ЗАГРУЗИТЬ ТУРНИРЫ ЗА ${maxAttempts} ПОПЫТОК\n\n${details}\n\n🔄 Перезагрузите страницу`, true);
-            clearInterval(interval);
-            
-            // Добавляем кнопку перезагрузки
-            const reloadBtn = document.createElement('button');
-            reloadBtn.textContent = '🔄 Перезагрузить сейчас';
-            reloadBtn.style.cssText = `
-                background: white;
-                color: #ff4444;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 5px;
-                margin-top: 10px;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                width: 100%;
-            `;
-            reloadBtn.onclick = () => location.reload();
-            debugBanner.appendChild(reloadBtn);
-        }
-        
-    }, 1000);
-})();
-// === КОНЕЦ ОТЛАДКИ ===
+        formatButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentFormatFilter = currentFormatFilter === button.dataset.format ? null : button.dataset.format;
+                setActiveButtons();
+                displayTournaments(currentMonthFilter, currentFormatFilter);
+            });
+        });
+    });
 
     </script>
     <!-- Для быстрой индексации фильтров -->
