@@ -107,7 +107,7 @@
       "@type": "WebSite",
       "name": "Детские шахматные турниры в Санкт-Петербурге",
       "url": "https://chess-spb.ru",
-      "description": "Полное расписание детских шахматных турниров в СПб на 2026 год",
+      "description": "Полное расписание детских шахматных турниров в СПб на 2025 год",
       "inLanguage": "ru",
       "publisher": {
         "@type": "Organization",
@@ -438,8 +438,6 @@
             <button class="month-btn" data-filter="2025-all">2025</button>
             <button class="month-btn" data-filter="2026-1">Январь 2026</button>
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
-            <button class="month-btn" data-filter="format-rapid">⚡ Рапид</button>
-            <button class="month-btn" data-filter="format-blitz">🔥 Блиц</button>
         </div>
         
         <div class="tournament-list" id="tournamentContainer">
@@ -1982,14 +1980,6 @@
 
         const YEAR_FILTER_2025 = '2025-all';
 
-        function filterByFormat(format) {
-            const searchTerm = format === 'format-rapid' ? 'рапид' : 'блиц';
-            return tournaments.filter(t =>
-                t.format.toLowerCase().includes(searchTerm) ||
-                (t.groups || []).some(g => g.toLowerCase().includes(searchTerm))
-            );
-        }
-
         function extractDayFromDate(dateString) {
             const match = dateString.match(/(\d+)/);
             if (match) {
@@ -2004,42 +1994,15 @@
             return 999;
         }
 
-        function extractEndDayFromDate(dateString) {
-            const rangeMatch = dateString.match(/(\d+)\s*[-–]\s*(\d+)/);
-            if (rangeMatch) {
-                return parseInt(rangeMatch[2], 10).toString().padStart(2, '0');
-            }
-
-            const dayMatch = dateString.match(/(\d+)/);
-            return dayMatch ? parseInt(dayMatch[1], 10).toString().padStart(2, '0') : '01';
-        }
-
-
-        function addTournamentStructuredData(tournament) {
-            const startDay = extractDayFromDate(tournament.date);
-            const padMonth = tournament.month.toString().padStart(2, '0');
-            const padStartDay = startDay.toString().padStart(2, '0');
-            const endDay = extractEndDayFromDate(tournament.date);
-            const startDate = `${tournament.year}-${padMonth}-${padStartDay}`;
-            const endDate = `${tournament.year}-${padMonth}-${endDay}`;
-            const groups = (tournament.groups || []).join(', ');
-            const priceNumbers = tournament.fee ? tournament.fee.match(/(\d+)/g) : null;
-            const offer = priceNumbers
-                ? {
-                    "@type": "Offer",
-                    "price": parseFloat(priceNumbers[0]),
-                    "priceCurrency": "RUB",
-                    "url": tournament.link,
-                    "availability": "https://schema.org/InStock"
-                }
-                : null;
-
-            const structuredData = {
+        function buildTournamentStructuredData(tournament) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "SportsEvent",
                 "name": tournament.name,
-                "startDate": startDate,
-                "endDate": endDate,
+                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
+                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
                 "eventStatus": "https://schema.org/EventScheduled",
                 "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                 "location": {
@@ -2051,26 +2014,13 @@
                         "addressCountry": "RU"
                     }
                 },
-                "description": `Шахматный турнир: ${tournament.format}. ${groups}`,
+                "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
                 "organizer": {
                     "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб",
+                    "name": tournament.name,
                     "url": tournament.link
-                },
-                "performer": {
-                    "@type": "Organization",
-                    "name": tournament.organizer || "Детские шахматные турниры СПб"
-                },
-                "image": tournament.image || "https://chess-spb.ru/logo.jpg"
-            };
-
-            if (offer) {
-                structuredData.offers = offer;
-            }
-
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify(structuredData);
+                }
+            });
             document.head.appendChild(script);
         }
 
@@ -2086,7 +2036,7 @@
 
             card.innerHTML = `
                 <div class="card-header">
-                    <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem;">${tournament.name}</h2>
+                    <h3>${tournament.name}</h3>
                     <p>${tournament.location || 'Санкт-Петербург'}</p>
                 </div>
                 <div class="card-body">
@@ -2102,7 +2052,7 @@
             `;
 
             container.appendChild(card);
-            addTournamentStructuredData(tournament);
+            buildTournamentStructuredData(tournament);
         }
 
         function getMonthName(monthNumber) {
@@ -2119,9 +2069,7 @@
 
             let filteredTournaments = tournaments;
 
-            if (filter === 'format-rapid' || filter === 'format-blitz') {
-                filteredTournaments = filterByFormat(filter);
-            } else if (filter === YEAR_FILTER_2025) {
+            if (filter === YEAR_FILTER_2025) {
                 filteredTournaments = tournaments.filter(t => t.year === 2025);
             } else {
                 const [year, month] = filter.split('-').map(Number);
