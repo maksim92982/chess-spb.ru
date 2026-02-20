@@ -2343,6 +2343,117 @@
                 });
             });
         });
+        // ===== ОПТИМИЗАЦИЯ ДЛЯ МОБИЛЬНЫХ - ПРИОРИТЕТНАЯ ЗАГРУЗКА =====
+if (window.innerWidth <= 768) {
+    // Функция для получения приоритетных турниров
+    function getPrioritizedTournaments() {
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+        
+        // Разделяем турниры по приоритету
+        const priority1 = []; // Текущий месяц
+        const priority2 = []; // Будущие месяцы
+        const priority3 = []; // Прошлые (2025 и ранее)
+        
+        tournaments.forEach(t => {
+            if (t.year === currentYear && t.month === currentMonth) {
+                priority1.push(t);
+            } else if (t.year > currentYear || (t.year === currentYear && t.month > currentMonth)) {
+                priority2.push(t);
+            } else {
+                priority3.push(t);
+            }
+        });
+        
+        return { priority1, priority2, priority3 };
+    }
+
+    // Функция для отображения турниров по приоритету
+    function displayPrioritizedTournaments() {
+        const container = document.getElementById('tournamentContainer');
+        const { priority1, priority2, priority3 } = getPrioritizedTournaments();
+        
+        // Очищаем контейнер
+        container.innerHTML = '';
+        
+        // Функция для создания заголовка секции
+        function addSectionHeader(title, count) {
+            if (count === 0) return null;
+            const header = document.createElement('div');
+            header.className = 'month-header';
+            header.innerHTML = `<h3>${title} (${count})</h3>`;
+            return header;
+        }
+        
+        // Функция для добавления турниров с задержкой
+        function addTournamentsWithDelay(tournamentList, delay = 0) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    tournamentList.forEach(t => createTournamentCard(t, container));
+                    resolve();
+                }, delay);
+            });
+        }
+        
+        // Показываем заголовок и турниры текущего месяца (сразу)
+        if (priority1.length > 0) {
+            const header = addSectionHeader('🔴 Текущие турниры', priority1.length);
+            if (header) container.appendChild(header);
+            priority1.forEach(t => createTournamentCard(t, container));
+        }
+        
+        // Показываем заголовок будущих турниров (сразу)
+        let futureHeader = null;
+        if (priority2.length > 0) {
+            futureHeader = addSectionHeader('🟡 Будущие турниры', priority2.length);
+            if (futureHeader) container.appendChild(futureHeader);
+        }
+        
+        // Добавляем будущие турниры с небольшой задержкой
+        setTimeout(() => {
+            priority2.forEach(t => createTournamentCard(t, container));
+        }, 100);
+        
+        // Показываем заголовок прошлых турниров (после будущих)
+        let pastHeader = null;
+        if (priority3.length > 0) {
+            pastHeader = addSectionHeader('🟢 Прошедшие турниры', priority3.length);
+            if (pastHeader) {
+                setTimeout(() => {
+                    container.appendChild(pastHeader);
+                }, 200);
+            }
+        }
+        
+        // Добавляем прошлые турниры с большей задержкой
+        setTimeout(() => {
+            priority3.forEach(t => createTournamentCard(t, container));
+        }, 300);
+        
+        // Показываем статистику загрузки
+        const stats = document.createElement('div');
+        stats.style.cssText = `
+            background: #f0f4f8;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #2c3e50;
+            text-align: center;
+        `;
+        stats.innerHTML = `
+            📊 Загружено: 
+            <strong>${priority1.length}</strong> текущих | 
+            <strong>${priority2.length}</strong> будущих | 
+            <strong>${priority3.length}</strong> прошедших
+        `;
+        container.parentNode.insertBefore(stats, container.nextSibling);
+    }
+
+    // Запускаем приоритетную загрузку
+    setTimeout(displayPrioritizedTournaments, 100);
+}
     </script>
     <!-- Для быстрой индексации фильтров -->
 <div style="display: none;">
