@@ -3,7 +3,7 @@
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
-    <script src="tournaments-data.js"></script>
+    <script src="tournaments-data.js?v=20260220_1"></script>
     <script>
   document.addEventListener('DOMContentLoaded', function () {
     var el = document.getElementById('tournamentContainer');
@@ -263,7 +263,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 12px rgba(44, 62, 80, 0.2);
         }
-
+        
         .btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 16px rgba(44, 62, 80, 0.25);
@@ -284,7 +284,7 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-
+        
         .month-btn {
             background-color: #f0f4f8;
             border: 1px solid #aec7e8;
@@ -366,9 +366,9 @@
         }
 
         .year-header {
-            grid-column: 1 / -1;
-            margin-bottom: 1.5rem;
-        }
+    grid-column: 1 / -1;
+    margin-bottom: 1.5rem;
+}
 
         .month-header {
             grid-column: 1 / -1;
@@ -396,6 +396,7 @@
 </head>
 <body>
     <div id="debugLog" style="
+  display: none;
   position: fixed; z-index: 999999;
   left: 8px; right: 8px; bottom: 8px;
   max-height: 45vh; overflow: auto;
@@ -423,7 +424,9 @@
     });
   }
 
+  window.__DEBUG__ = location.search.includes('debug=1');
   window.__dbg = function (msg, obj) {
+    if (!window.__DEBUG__) return;
     try {
       var time = new Date().toISOString().slice(11, 19);
       var line = '<div style="margin:3px 0;"><span style="opacity:.7;">['+time+']</span> ' + esc(msg) + '</div>';
@@ -474,6 +477,11 @@
     now: new Date().toString()
   });
 })();
+</script>
+<script>
+  if (window.__DEBUG__) {
+    document.getElementById('debugLog').style.display = 'block';
+  }
 </script>
 <script>
 (function(){
@@ -537,7 +545,7 @@
             <button class="month-btn" data-filter="2026-1">Январь 2026</button>
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
             <button class="month-btn" data-filter="2026-3">Март 2026</button>
-        </div>
+         </div>
         
         <div class="tournament-list" id="tournamentContainer">
             <!-- Турниры будут добавляться через JavaScript -->
@@ -634,33 +642,33 @@
         }
 
         function createTournamentCard(tournament, container) {
-            const card = document.createElement('div');
-            card.className = 'tournament-card';
+        const card = document.createElement('div');
+        card.className = 'tournament-card';
             card.setAttribute('data-year', tournament.year);
-
-            let groupsHTML = '';
+        
+        let groupsHTML = '';
             (tournament.groups || []).forEach(group => {
-                groupsHTML += `<p>• ${group}</p>`;
-            });
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <h3>${tournament.name}</h3>
+            groupsHTML += `<p>• ${group}</p>`;
+        });
+        
+        card.innerHTML = `
+            <div class="card-header">
+                <h3>${tournament.name}</h3>
                     <p>${tournament.location || 'Санкт-Петербург'}</p>
+            </div>
+            <div class="card-body">
+                <div class="tournament-info">
+                    <p><span class="info-label">Дата:</span> ${tournament.date}</p>
+                    <p><span class="info-label">Формат:</span> ${tournament.format}</p>
+                    <p><span class="info-label">Группы:</span></p>
+                    ${groupsHTML}
+                    <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
                 </div>
-                <div class="card-body">
-                    <div class="tournament-info">
-                        <p><span class="info-label">Дата:</span> ${tournament.date}</p>
-                        <p><span class="info-label">Формат:</span> ${tournament.format}</p>
-                        <p><span class="info-label">Группы:</span></p>
-                        ${groupsHTML}
-                        <p><span class="info-label">Взнос:</span> ${tournament.fee || 'Уточняйте в положении'}</p>
-                    </div>
-                    <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
-                </div>
-            `;
-
-            container.appendChild(card);
+                <a href="${tournament.link}" target="_blank" class="btn">Подробнее</a>
+            </div>
+        `;
+        
+        container.appendChild(card);
             buildTournamentStructuredData(tournament);
         }
 
@@ -733,7 +741,7 @@
                         });
                     });
                 });
-            } else {
+        } else {
                 const [year, month] = filter.split('-').map(Number);
                 const monthName = getMonthName(month);
 
@@ -800,13 +808,13 @@ document.addEventListener('DOMContentLoaded', () => {
     __dbg('DOM_READY handler entered');
 
     const monthButtons = document.querySelectorAll('.month-btn');
-
+    
     monthButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        monthButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+        button.addEventListener('click', () => {
+            monthButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
         displayTournaments(button.dataset.filter);
-      });
+        });
     });
 
     if (window.innerWidth <= 768) {
@@ -835,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
     __dbg('CRASH in DOMContentLoaded', e && e.stack ? e.stack : String(e));
   }
 });
-</script>
+    </script>
 <script>
   if (window.__dbg) {
     __dbg('AFTER_BIG_SCRIPT: reached');
