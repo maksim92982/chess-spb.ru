@@ -2382,6 +2382,7 @@ function displayPrioritizedTournaments() {
   if (window.innerWidth <= 768) {
     console.log('MOBILE_MODE');
     monthButtons.forEach(btn => btn.classList.remove('active'));
+      console.log('prioritized count', getPrioritizedTournaments(12).length);
     displayPrioritizedTournaments();
     return;
   }
