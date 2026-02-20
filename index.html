@@ -4,6 +4,12 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
     <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('tournamentContainer');
+    if (el) el.innerHTML = '<div class="no-tournaments"><p><b>DEBUG:</b> DOM готов, JS запустился</p></div>';
+  });
+</script>
+    <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
