@@ -394,6 +394,86 @@
     </style>
 </head>
 <body>
+    <div id="debugLog" style="
+  position: fixed; z-index: 999999;
+  left: 8px; right: 8px; bottom: 8px;
+  max-height: 45vh; overflow: auto;
+  background: rgba(0,0,0,.88); color: #fff;
+  font: 12px/1.35 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  padding: 10px; border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+">
+  <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+    <b>DEBUG</b>
+    <button id="debugClear" style="margin-left:auto; padding:4px 8px; border-radius:8px; border:0;">Очистить</button>
+    <button id="debugHide" style="padding:4px 8px; border-radius:8px; border:0;">Скрыть</button>
+  </div>
+  <div id="debugItems"></div>
+</div>
+
+<script>
+(function () {
+  var box = document.getElementById('debugLog');
+  var items = document.getElementById('debugItems');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
+    });
+  }
+
+  window.__dbg = function (msg, obj) {
+    try {
+      var time = new Date().toISOString().slice(11, 19);
+      var line = '<div style="margin:3px 0;"><span style="opacity:.7;">['+time+']</span> ' + esc(msg) + '</div>';
+      items.insertAdjacentHTML('beforeend', line);
+
+      if (obj !== undefined) {
+        var pre = document.createElement('pre');
+        pre.style.whiteSpace = 'pre-wrap';
+        pre.style.margin = '4px 0 8px';
+        pre.style.opacity = '0.95';
+        try {
+          pre.textContent = (typeof obj === 'string') ? obj : JSON.stringify(obj, null, 2);
+        } catch (e) {
+          pre.textContent = String(obj);
+        }
+        items.appendChild(pre);
+      }
+
+      box.scrollTop = box.scrollHeight;
+    } catch (e) {}
+  };
+
+  document.getElementById('debugClear').onclick = function () { items.innerHTML = ''; };
+  document.getElementById('debugHide').onclick = function () {
+    box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+  };
+
+  window.addEventListener('error', function (e) {
+    window.__dbg('window.error: ' + (e && e.message ? e.message : 'unknown'), {
+      filename: e && e.filename,
+      lineno: e && e.lineno,
+      colno: e && e.colno,
+      error: e && e.error && e.error.stack ? e.error.stack : (e && e.error ? String(e.error) : null)
+    });
+  });
+
+  window.addEventListener('unhandledrejection', function (e) {
+    var reason = e && e.reason;
+    window.__dbg('unhandledrejection', reason && reason.stack ? reason.stack : String(reason));
+  });
+
+  window.__dbg('BOOT', {
+    ua: navigator.userAgent,
+    href: location.href,
+    w: window.innerWidth,
+    h: window.innerHeight,
+    dpr: window.devicePixelRatio,
+    now: new Date().toString()
+  });
+})();
+</script>
     <header>
         <div class="header-content">
             <h1>Детские шахматные турниры</h1>
@@ -473,6 +553,7 @@
 
     console.log('SCRIPT_START');
   })();
+        __dbg('before tournaments declared');
         // Данные о турнирах
         const tournaments = [
             // ИЮЛЬСКИЕ ТУРНИРЫ
@@ -2171,6 +2252,11 @@
 
         const YEAR_FILTER_2025 = '2025-all';
 
+        __dbg('tournaments loaded', {
+            count: tournaments.length,
+            sample: tournaments[0] ? tournaments[0].name : null
+        });
+
         function extractDayFromDate(dateString) {
             const match = dateString.match(/(\d+)/);
             if (match) {
@@ -2340,6 +2426,11 @@ function getPrioritizedTournaments(limit = 12) {
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
+  __dbg('prioritized calc', {
+    today: today.toDateString(),
+    futureCount: tournaments.filter(t => getTournamentStartDate(t) >= today).length
+  });
+
   return tournaments
     .map(t => Object.assign({}, t, { _start: getTournamentStartDate(t) }))
     // показываем ближайшие и будущие (сегодня тоже)
@@ -2349,6 +2440,7 @@ function getPrioritizedTournaments(limit = 12) {
 }
 
 function displayPrioritizedTournaments() {
+  __dbg('displayPrioritizedTournaments()');
   const container = document.getElementById('tournamentContainer');
   if (!container) return;
 
@@ -2370,47 +2462,46 @@ function displayPrioritizedTournaments() {
 
   list.forEach(t => createTournamentCard(t, container));
 }
-       document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM_READY');
+document.addEventListener('DOMContentLoaded', () => {
+  __dbg('DOM_READY handler start', { width: window.innerWidth });
+  try {
+    __dbg('DOM_READY handler entered');
 
-  const monthButtons = document.querySelectorAll('.month-btn');
+    const monthButtons = document.querySelectorAll('.month-btn');
 
-  // Навешиваем клики сразу (они одинаковые для моб/десктопа)
-  monthButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      monthButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      displayTournaments(button.dataset.filter);
+    monthButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        monthButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        displayTournaments(button.dataset.filter);
+      });
     });
-  });
 
-  // ✅ Мобилка: показываем только ближайшие и выходим (не затираем их displayTournaments ниже)
-  if (window.innerWidth <= 768) {
-    console.log('MOBILE_MODE');
-    monthButtons.forEach(btn => btn.classList.remove('active'));
-      console.log('prioritized count', getPrioritizedTournaments(12).length);
-    displayPrioritizedTournaments();
-    return;
+    if (window.innerWidth <= 768) {
+      __dbg('MOBILE_MODE branch', { prioritized: getPrioritizedTournaments(12).length });
+      monthButtons.forEach(btn => btn.classList.remove('active'));
+      displayPrioritizedTournaments();
+      return;
+    }
+
+    const now = new Date();
+    let defaultFilter = YEAR_FILTER_2025;
+
+    if (now.getFullYear() === 2026) {
+      const month = now.getMonth() + 1;
+      if (month === 1) defaultFilter = '2026-1';
+      else if (month === 2) defaultFilter = '2026-2';
+      else if (tournaments.some(t => t.year === 2026 && t.month === 2)) defaultFilter = '2026-2';
+    }
+
+    monthButtons.forEach(button => {
+      button.classList.toggle('active', button.dataset.filter === defaultFilter);
+    });
+
+    displayTournaments(defaultFilter);
+  } catch (e) {
+    __dbg('CRASH in DOMContentLoaded', e && e.stack ? e.stack : String(e));
   }
-
-  // ✅ Десктоп: обычная логика
-  const now = new Date();
-  let defaultFilter = YEAR_FILTER_2025;
-
-  if (now.getFullYear() === 2026) {
-    const month = now.getMonth() + 1;
-    if (month === 1) defaultFilter = '2026-1';
-    else if (month === 2) defaultFilter = '2026-2';
-    else if (tournaments.some(t => t.year === 2026 && t.month === 2)) defaultFilter = '2026-2';
-  }
-
-  console.log(`Будем показывать: ${defaultFilter}`);
-
-  monthButtons.forEach(button => {
-    button.classList.toggle('active', button.dataset.filter === defaultFilter);
-  });
-
-  displayTournaments(defaultFilter);
 });
     </script>
     <!-- Для быстрой индексации фильтров -->
