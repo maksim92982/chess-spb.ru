@@ -2335,7 +2335,7 @@ function getPrioritizedTournaments(limit = 12) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
   return tournaments
-    .map(t => ({ ...t, _start: getTournamentStartDate(t) }))
+    .map(t => Object.assign({}, t, { _start: getTournamentStartDate(t) }))
     // показываем ближайшие и будущие (сегодня тоже)
     .filter(t => t._start >= today)
     .sort((a, b) => a._start - b._start)
