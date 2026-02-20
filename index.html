@@ -569,7 +569,18 @@
     console.log('SCRIPT_START');
   })();
         __dbg('before tournaments declared');
-        const tournaments = window.tournaments || [];
+        __dbg('tournaments typeof', {
+            type: typeof window.tournaments,
+            isArray: Array.isArray(window.tournaments),
+            ctor: window.tournaments && window.tournaments.constructor ? window.tournaments.constructor.name : null
+        });
+        const tournaments = Array.isArray(window.tournaments)
+            ? window.tournaments
+            : [];
+        __dbg('tournaments value sample', window.tournaments);
+        __dbg('tournaments sample keys', window.tournaments && typeof window.tournaments === 'object'
+            ? Object.keys(window.tournaments).slice(0, 20)
+            : window.tournaments);
 
         const YEAR_FILTER_2025 = '2025-all';
 
