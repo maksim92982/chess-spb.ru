@@ -2526,107 +2526,128 @@
             });
         });
 
-  (function() {
-        // Создаем лог сразу при загрузке скрипта
-        const debugDiv = document.createElement('div');
-        debugDiv.id = 'debug-log';
-        debugDiv.style.cssText = `
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.9);
-            color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            z-index: 10000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            max-width: 95%;
-            margin: 0 auto;
-            text-align: left;
-            white-space: pre-wrap;
-            word-break: break-word;
+  // === ВРЕМЕННАЯ ОТЛАДКА ДЛЯ ТЕЛЕФОНА ===
+(function() {
+    // Создаем большой красный баннер в самом верху страницы
+    const debugBanner = document.createElement('div');
+    debugBanner.style.cssText = `
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #ff4444;
+        color: white;
+        padding: 15px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 999999;
+        border-bottom: 3px solid #cc0000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        font-family: Arial, sans-serif;
+        margin-bottom: 10px;
+    `;
+    
+    // Функция обновления баннера
+    function updateBanner(message, isError = true) {
+        debugBanner.innerHTML = `
+            <div style="margin-bottom: 5px;">🔧 РЕЖИМ ОТЛАДКИ</div>
+            <div style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 5px;">
+                ${message}
+            </div>
+            <div style="font-size: 12px; margin-top: 8px; color: #ffeeee;">
+                Время: ${new Date().toLocaleTimeString()}
+            </div>
         `;
+        document.body.prepend(debugBanner);
+    }
+    
+    updateBanner('⏳ Проверка загрузки турниров...');
+    
+    // Проверяем каждую секунду и обновляем баннер
+    let attempts = 0;
+    const maxAttempts = 20;
+    
+    const interval = setInterval(() => {
+        attempts++;
         
-        // Функция для обновления лога
-        function updateLog(message, type = 'info') {
-            const colors = {
-                info: '#4caf50',
-                error: '#ff6b6b',
-                warning: '#ffa500'
-            };
+        const container = document.getElementById('tournamentContainer');
+        const tournamentsCount = typeof tournaments !== 'undefined' ? tournaments.length : 'не определен';
+        
+        let status = '';
+        let details = '';
+        
+        // Проверяем наличие турниров
+        if (!container) {
+            status = '❌ ОШИБКА: Контейнер tournamentContainer не найден!';
+        } else {
+            const cards = container.querySelectorAll('.tournament-card');
+            const noTournamentsMsg = container.querySelector('.no-tournaments');
             
-            debugDiv.innerHTML = `
-                <div style="color: ${colors[type] || colors.info}; font-weight: bold; margin-bottom: 8px;">
-                    ${type === 'error' ? '❌ ОШИБКА' : type === 'warning' ? '⚠️ ВНИМАНИЕ' : '✅ ИНФО'}
-                </div>
-                <div style="margin-bottom: 8px;">${message.replace(/\n/g, '<br>')}</div>
-                <div style="font-size: 12px; color: #aaa; border-top: 1px solid #333; padding-top: 8px;">
-                    ${new Date().toLocaleTimeString()}
-                </div>
-            `;
+            details += `Контейнер: ✅ найден\n`;
+            details += `Карточек в DOM: ${cards.length}\n`;
+            details += `Всего турниров в данных: ${tournamentsCount}\n`;
+            details += `Текущий фильтр: ${currentMonthFilter}\n`;
+            details += `Текущий формат: ${currentFormatFilter}\n`;
+            
+            if (cards.length > 0) {
+                status = '✅ ТУРНИРЫ ЗАГРУЖЕНЫ!';
+                details += `\n✅ УСПЕХ: видно ${cards.length} турниров`;
+            } else if (noTournamentsMsg) {
+                status = 'ℹ️ Турниров нет за этот месяц';
+                details += `\n${noTournamentsMsg.textContent}`;
+            } else {
+                status = '⏳ Турниры еще загружаются...';
+            }
+            
+            // Проверяем наличие ошибок в консоли (имитация)
+            if (cards.length === 0 && attempts > 5) {
+                details += `\n\n⚠️ Возможные проблемы:
+• JavaScript не выполнился до конца
+• Конфликт с другими скриптами
+• Проблемы с интернетом на телефоне`;
+            }
         }
         
-        // Добавляем лог на страницу
-        document.body.appendChild(debugDiv);
+        updateBanner(`${status}\n\n${details}`, status.includes('ОШИБКА'));
         
-        // Логируем основные этапы
-        updateLog('🔍 Скрипт запущен\nПроверяем загрузку турниров...');
+        // Если турниры загрузились, показываем баннер еще 5 секунд и убираем
+        if (container && container.querySelectorAll('.tournament-card').length > 0) {
+            setTimeout(() => {
+                debugBanner.style.transition = 'opacity 1s';
+                debugBanner.style.opacity = '0';
+                setTimeout(() => debugBanner.remove(), 1000);
+            }, 5000);
+            clearInterval(interval);
+        }
         
-        // Проверяем массив турниров
-        setTimeout(() => {
-            if (typeof tournaments !== 'undefined') {
-                updateLog(`✅ Массив tournaments найден\nВсего турниров: ${tournaments.length}`);
-            } else {
-                updateLog(`❌ Массив tournaments НЕ НАЙДЕН!\nПроверьте, не сломался ли скрипт выше`, 'error');
-            }
-        }, 500);
+        // Если слишком много попыток, оставляем баннер навсегда
+        if (attempts >= maxAttempts) {
+            updateBanner(`❌ НЕ УДАЛОСЬ ЗАГРУЗИТЬ ТУРНИРЫ ЗА ${maxAttempts} ПОПЫТОК\n\n${details}\n\n🔄 Перезагрузите страницу`, true);
+            clearInterval(interval);
+            
+            // Добавляем кнопку перезагрузки
+            const reloadBtn = document.createElement('button');
+            reloadBtn.textContent = '🔄 Перезагрузить сейчас';
+            reloadBtn.style.cssText = `
+                background: white;
+                color: #ff4444;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                margin-top: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                width: 100%;
+            `;
+            reloadBtn.onclick = () => location.reload();
+            debugBanner.appendChild(reloadBtn);
+        }
         
-        // Проверяем контейнер
-        setTimeout(() => {
-            const container = document.getElementById('tournamentContainer');
-            if (container) {
-                updateLog(`✅ Контейнер tournamentContainer найден`);
-                
-                // Проверяем, есть ли в нем элементы
-                setTimeout(() => {
-                    const cards = container.querySelectorAll('.tournament-card');
-                    if (cards.length > 0) {
-                        updateLog(`✅ Турниры загружены!\nНайдено карточек: ${cards.length}`);
-                        
-                        // Убираем лог через 3 секунды
-                        setTimeout(() => {
-                            if (debugDiv.parentNode) {
-                                debugDiv.remove();
-                            }
-                        }, 3000);
-                    } else {
-                        // Проверяем, есть ли сообщение об отсутствии турниров
-                        const noTournaments = container.querySelector('.no-tournaments');
-                        if (noTournaments) {
-                            updateLog(`ℹ️ Турниров на выбранный месяц нет`, 'warning');
-                            setTimeout(() => {
-                                if (debugDiv.parentNode) {
-                                    debugDiv.remove();
-                                }
-                            }, 3000);
-                        } else {
-                            updateLog(`❌ Контейнер пуст!\nФильтр: ${currentMonthFilter}\nФормат: ${currentFormatFilter}`, 'error');
-                        }
-                    }
-                }, 1000);
-            } else {
-                updateLog(`❌ Контейнер tournamentContainer НЕ НАЙДЕН!\nПроверьте HTML`, 'error');
-            }
-        }, 1000);
-        
-        // Ловим ошибки JavaScript
-        window.onerror = function(msg, url, line) {
-            updateLog(`❌ Ошибка JavaScript:\n${msg}\nСтрока: ${line}`, 'error');
-        };
-    })();
+    }, 1000);
+})();
+// === КОНЕЦ ОТЛАДКИ ===
 
     </script>
     <!-- Для быстрой индексации фильтров -->
