@@ -2402,8 +2402,48 @@
             });
         };
 
-        setActiveButtons();
-        displayTournaments(currentMonthFilter, currentFormatFilter);
+        // Ускоряем загрузку на мобильных устройствах
+if (window.innerWidth <= 768) {
+    // Определяем текущую дату
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1; // Январь = 1, Февраль = 2 и т.д.
+    
+    // Находим ближайший месяц с турнирами (текущий или следующий)
+    let foundMonth = null;
+    let foundYear = null;
+    
+    // Проверяем все турниры, отсортированные по дате
+    const sortedTournaments = [...tournaments].sort((a, b) => {
+        if (a.year !== b.year) return a.year - b.year;
+        return a.month - b.month;
+    });
+    
+    for (let t of sortedTournaments) {
+        if (t.year > currentYear || (t.year === currentYear && t.month >= currentMonth)) {
+            foundMonth = t.month;
+            foundYear = t.year;
+            break;
+        }
+    }
+    
+    // Если нашли будущие турниры
+    if (foundYear && foundMonth) {
+        currentMonthFilter = `${foundYear}-${foundMonth}`;
+        console.log(`Мобильная версия: показываем ${foundYear}-${foundMonth}`);
+    } else {
+        // Если нет будущих турниров (маловероятно), показываем последний доступный
+        const last = sortedTournaments[sortedTournaments.length - 1];
+        if (last) {
+            currentMonthFilter = `${last.year}-${last.month}`;
+        }
+    }
+    
+    currentFormatFilter = null;
+}
+
+setActiveButtons();
+displayTournaments(currentMonthFilter, currentFormatFilter);
 
         monthButtons.forEach(button => {
             button.addEventListener('click', () => {
