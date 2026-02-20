@@ -474,6 +474,17 @@
   });
 })();
 </script>
+<script>
+(function(){
+  var v = 'build:2026-02-20_1';
+  document.documentElement.setAttribute('data-build', v);
+  if (window.__dbg) __dbg('BUILD_TAG', v);
+  var badge = document.createElement('div');
+  badge.textContent = v;
+  badge.style.cssText = 'position:fixed;top:8px;right:8px;z-index:999999;background:#000;color:#fff;padding:4px 8px;border-radius:8px;font-size:12px;opacity:.85';
+  document.body.appendChild(badge);
+})();
+</script>
     <header>
         <div class="header-content">
             <h1>Детские шахматные турниры</h1>
@@ -2503,7 +2514,14 @@ document.addEventListener('DOMContentLoaded', () => {
     __dbg('CRASH in DOMContentLoaded', e && e.stack ? e.stack : String(e));
   }
 });
-    </script>
+</script>
+<script>
+  if (window.__dbg) {
+    __dbg('AFTER_BIG_SCRIPT: reached');
+  } else {
+    alert('AFTER_BIG_SCRIPT: __dbg missing');
+  }
+</script>
     <!-- Для быстрой индексации фильтров -->
 <div style="display: none;">
     <a href="/#rapid">Рапид турниры СПб 2026</a>
