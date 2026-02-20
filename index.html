@@ -2364,21 +2364,29 @@ function displayPrioritizedTournaments() {
 
   list.forEach(t => createTournamentCard(t, container));
 }
-        document.addEventListener('DOMContentLoaded', () => {
+       document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM_READY');
 
   const monthButtons = document.querySelectorAll('.month-btn');
 
-  // ✅ Мобилка: только prioritized, без обычного displayTournaments
+  // Навешиваем клики сразу (они одинаковые для моб/десктопа)
+  monthButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      monthButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+      displayTournaments(button.dataset.filter);
+    });
+  });
+
+  // ✅ Мобилка: показываем только ближайшие и выходим (не затираем их displayTournaments ниже)
   if (window.innerWidth <= 768) {
-  console.log('MOBILE_MODE');
-  monthButtons.forEach(btn => btn.classList.remove('active'));
+    console.log('MOBILE_MODE');
+    monthButtons.forEach(btn => btn.classList.remove('active'));
+    displayPrioritizedTournaments();
+    return;
+  }
 
-  displayPrioritizedTournaments(); // стартовая выдача на мобилке
-  // НЕ return;  <-- убрали, чтобы ниже навесились клики
-}
-
-  // ✅ Десктоп: обычная логика как была
+  // ✅ Десктоп: обычная логика
   const now = new Date();
   let defaultFilter = YEAR_FILTER_2025;
 
@@ -2396,14 +2404,6 @@ function displayPrioritizedTournaments() {
   });
 
   displayTournaments(defaultFilter);
-
-  monthButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      monthButtons.forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-      displayTournaments(button.dataset.filter);
-    });
-  });
 });
     </script>
     <!-- Для быстрой индексации фильтров -->
