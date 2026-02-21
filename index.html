@@ -14,6 +14,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" as="style">
     
     <!-- Подтверждение прав для Google Search Console -->
     <meta name="google-site-verification" content="JmK153xWDEDha8CdndCO87cB6RmqpSr3l479tJlFPO4" />
@@ -378,6 +379,17 @@
             margin: 0;
         }
 
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
+        }
+
         @media (max-width: 768px) {
             .tournament-list {
                 grid-template-columns: 1fr;
@@ -443,6 +455,10 @@
             <button class="month-btn" data-filter="2026-2">Февраль 2026</button>
             <button class="month-btn" data-filter="2026-3">Март 2026</button>
          </div>
+        <div class="seo-headings">
+            <h1 class="sr-only">Детские шахматные турниры в Санкт-Петербурге 2026</h1>
+            <h2 style="text-align: center; margin: 2rem 0; color: var(--primary);">Расписание турниров на 2026 год</h2>
+        </div>
         
         <div class="tournament-list" id="tournamentContainer">
             <!-- Турниры будут добавляться через JavaScript -->
@@ -505,14 +521,30 @@
         }
 
         function buildTournamentStructuredData(tournament) {
-            const script = document.createElement('script');
-            script.type = 'application/ld+json';
-            script.text = JSON.stringify({
+            let startDay = 1;
+            let endDay = 28;
+
+            const dayMatch = tournament.date.match(/(\d+)/);
+            if (dayMatch) startDay = parseInt(dayMatch[1], 10);
+
+            const rangeMatch = tournament.date.match(/(\d+)\s*[-–]\s*(\d+)/);
+            if (rangeMatch) {
+                endDay = parseInt(rangeMatch[2], 10);
+            } else {
+                endDay = startDay;
+            }
+
+            const startDate = `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-${startDay.toString().padStart(2, '0')}`;
+            const endDate = `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-${endDay.toString().padStart(2, '0')}`;
+
+            const priceValue = tournament.fee ? tournament.fee.replace(/[₽\s]+/g, '') : "0";
+
+            const structuredData = {
                 "@context": "https://schema.org",
                 "@type": "SportsEvent",
                 "name": tournament.name,
-                "startDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-01`,
-                "endDate": `${tournament.year}-${tournament.month.toString().padStart(2, '0')}-28`,
+                "startDate": startDate,
+                "endDate": endDate,
                 "eventStatus": "https://schema.org/EventScheduled",
                 "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
                 "location": {
@@ -527,10 +559,28 @@
                 "description": `Шахматный турнир: ${tournament.format}. ${(tournament.groups || []).join(', ')}`,
                 "organizer": {
                     "@type": "Organization",
-                    "name": tournament.name,
+                    "name": "Детские шахматные турниры СПб",
+                    "url": tournament.link
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": priceValue,
+                    "priceCurrency": "RUB",
+                    "availability": "https://schema.org/InStock",
                     "url": tournament.link
                 }
-            });
+            };
+
+            if (tournament.name.includes('T-Chess') || tournament.name.includes('ChessChamp') || tournament.name.includes('GoodChess')) {
+                structuredData.performer = {
+                    "@type": "Organization",
+                    "name": tournament.name.split(' ')[0]
+                };
+            }
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.text = JSON.stringify(structuredData);
             document.head.appendChild(script);
         }
 
