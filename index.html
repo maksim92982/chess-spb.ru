@@ -5,12 +5,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
     <script src="tournaments-data.js?v=20260220_1"></script>
     <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var el = document.getElementById('tournamentContainer');
-    if (el) el.innerHTML = '<div class="no-tournaments"><p><b>DEBUG:</b> DOM готов, JS запустился</p></div>';
-  });
-</script>
-    <script>
+      if (!window.__dbg) window.__dbg = function () {};
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -395,105 +390,7 @@
     </style>
 </head>
 <body>
-    <div id="debugLog" style="
-  display: none;
-  position: fixed; z-index: 999999;
-  left: 8px; right: 8px; bottom: 8px;
-  max-height: 45vh; overflow: auto;
-  background: rgba(0,0,0,.88); color: #fff;
-  font: 12px/1.35 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-  padding: 10px; border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.35);
-">
-  <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-    <b>DEBUG</b>
-    <button id="debugClear" style="margin-left:auto; padding:4px 8px; border-radius:8px; border:0;">Очистить</button>
-    <button id="debugHide" style="padding:4px 8px; border-radius:8px; border:0;">Скрыть</button>
-  </div>
-  <div id="debugItems"></div>
-</div>
-
-<script>
-(function () {
-  var box = document.getElementById('debugLog');
-  var items = document.getElementById('debugItems');
-
-  function esc(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]);
-    });
-  }
-
-  window.__DEBUG__ = location.search.includes('debug=1');
-  window.__dbg = function (msg, obj) {
-    if (!window.__DEBUG__) return;
-    try {
-      var time = new Date().toISOString().slice(11, 19);
-      var line = '<div style="margin:3px 0;"><span style="opacity:.7;">['+time+']</span> ' + esc(msg) + '</div>';
-      items.insertAdjacentHTML('beforeend', line);
-
-      if (obj !== undefined) {
-        var pre = document.createElement('pre');
-        pre.style.whiteSpace = 'pre-wrap';
-        pre.style.margin = '4px 0 8px';
-        pre.style.opacity = '0.95';
-        try {
-          pre.textContent = (typeof obj === 'string') ? obj : JSON.stringify(obj, null, 2);
-        } catch (e) {
-          pre.textContent = String(obj);
-        }
-        items.appendChild(pre);
-      }
-
-      box.scrollTop = box.scrollHeight;
-    } catch (e) {}
-  };
-
-  document.getElementById('debugClear').onclick = function () { items.innerHTML = ''; };
-  document.getElementById('debugHide').onclick = function () {
-    box.style.display = (box.style.display === 'none') ? 'block' : 'none';
-  };
-
-  window.addEventListener('error', function (e) {
-    window.__dbg('window.error: ' + (e && e.message ? e.message : 'unknown'), {
-      filename: e && e.filename,
-      lineno: e && e.lineno,
-      colno: e && e.colno,
-      error: e && e.error && e.error.stack ? e.error.stack : (e && e.error ? String(e.error) : null)
-    });
-  });
-
-  window.addEventListener('unhandledrejection', function (e) {
-    var reason = e && e.reason;
-    window.__dbg('unhandledrejection', reason && reason.stack ? reason.stack : String(reason));
-  });
-
-  window.__dbg('BOOT', {
-    ua: navigator.userAgent,
-    href: location.href,
-    w: window.innerWidth,
-    h: window.innerHeight,
-    dpr: window.devicePixelRatio,
-    now: new Date().toString()
-  });
-})();
-</script>
-<script>
-  if (window.__DEBUG__) {
-    document.getElementById('debugLog').style.display = 'block';
-  }
-</script>
-<script>
-(function(){
-  var v = 'build:2026-02-20_1';
-  document.documentElement.setAttribute('data-build', v);
-  if (window.__dbg) __dbg('BUILD_TAG', v);
-  var badge = document.createElement('div');
-  badge.textContent = v;
-  badge.style.cssText = 'position:fixed;top:8px;right:8px;z-index:999999;background:#000;color:#fff;padding:4px 8px;border-radius:8px;font-size:12px;opacity:.85';
-  document.body.appendChild(badge);
-})();
-</script>
+ 
     <header>
         <div class="header-content">
             <h1>Детские шахматные турниры</h1>
@@ -555,10 +452,6 @@
     <footer>
         <p>© 2026-2027 Детские шахматные турниры СПб | Информация обновляется по мере публикации</p>
     </footer>
-    <div style="position:fixed;top:50px;right:8px;z-index:999999;background:#0a0;color:#fff;padding:4px 8px;border-radius:8px;font-size:12px;">
-      END_MARKER_OK
-    </div>
-
     <script>
           (function () {
     function show(msg) {
@@ -844,13 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
     </script>
-<script>
-  if (window.__dbg) {
-    __dbg('AFTER_BIG_SCRIPT: reached');
-  } else {
-    alert('AFTER_BIG_SCRIPT: __dbg missing');
-  }
-</script>
     <!-- Для быстрой индексации фильтров -->
 <div style="display: none;">
     <a href="/#rapid">Рапид турниры СПб 2026</a>
