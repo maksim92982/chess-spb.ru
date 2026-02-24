@@ -3,7 +3,7 @@
   <!-- Главная страница -->
   <url>
     <loc>https://chess-spb.ru/</loc>
-    <lastmod>2026-02-16</lastmod>  <!-- ОБНОВИТЕ ДАТУ -->
+    <lastmod>2026-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -11,15 +11,15 @@
   <!-- Турниры 2026 года (Февраль) -->
   <url>
     <loc>https://chess-spb.ru/#2026-2</loc>
-    <lastmod>2026-02-16</lastmod>  <!-- ОБНОВИТЕ ДАТУ -->
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
-  <!-- Турниры 2026 года (Март) - НОВЫЙ -->
+  <!-- Турниры 2026 года (Март) -->
   <url>
     <loc>https://chess-spb.ru/#2026-3</loc>
-    <lastmod>2026-02-16</lastmod>
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -27,7 +27,7 @@
   <!-- Рапид -->
   <url>
     <loc>https://chess-spb.ru/#rapid</loc>
-    <lastmod>2026-02-16</lastmod>  <!-- ОБНОВИТЕ ДАТУ -->
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -35,7 +35,7 @@
   <!-- Блиц -->
   <url>
     <loc>https://chess-spb.ru/#blitz</loc>
-    <lastmod>2026-02-16</lastmod>  <!-- ОБНОВИТЕ ДАТУ -->
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -43,7 +43,7 @@
   <!-- Классика -->
   <url>
     <loc>https://chess-spb.ru/#classic</loc>
-    <lastmod>2026-02-16</lastmod>  <!-- ОБНОВИТЕ ДАТУ -->
+    <lastmod>2026-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
