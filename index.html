@@ -471,13 +471,12 @@
             isArray: Array.isArray(window.tournaments),
             ctor: window.tournaments && window.tournaments.constructor ? window.tournaments.constructor.name : null
         });
-        const tournaments = Array.isArray(window.tournaments)
-            ? window.tournaments
-            : [];
-        __dbg('tournaments value sample', window.tournaments);
-        __dbg('tournaments sample keys', window.tournaments && typeof window.tournaments === 'object'
-            ? Object.keys(window.tournaments).slice(0, 20)
-            : window.tournaments);
+        // Инициализируем турнирами 2026 года (будут загружены сразу)
+let tournaments = Array.isArray(window.tournaments2026) ? window.tournaments2026 : [];
+// Сохраняем ссылку для будущего объединения
+window.tournaments = tournaments;
+
+__dbg('tournaments2026 loaded', { count: tournaments.length });
 
         const YEAR_FILTER_2025 = '2025-all';
 
@@ -732,14 +731,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const monthButtons = document.querySelectorAll('.month-btn');
     
+    // Новый обработчик кликов с поддержкой загрузки 2025 года
     monthButtons.forEach(button => {
         button.addEventListener('click', () => {
             monthButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-            displayTournaments(button.dataset.filter);
+
+            const filter = button.dataset.filter;
+
+            // Если выбрали 2025-й и данные ещё не загружены
+            if (filter === '2025-all' && !window.tournaments2025Loaded) {
+                const script = document.createElement('script');
+                script.src = 'tournaments-2025.js?v=20260308';
+                script.onload = () => {
+                    window.tournaments2025Loaded = true;
+                    // Объединяем с текущими данными
+                    window.tournaments = [...window.tournaments2026, ...window.tournaments2025];
+                    // Обновляем и переменную tournaments (она объявлена через let)
+                    tournaments = window.tournaments;
+                    displayTournaments(filter);
+                };
+                document.head.appendChild(script);
+                return;
+            }
+
+            displayTournaments(filter);
         });
     });
 
+    // Мобильная версия: показываем ближайшие турниры
     if (window.innerWidth <= 768) {
       __dbg('MOBILE_MODE branch', { prioritized: getPrioritizedTournaments(12).length });
       monthButtons.forEach(btn => btn.classList.remove('active'));
@@ -747,25 +767,25 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Определяем фильтр по умолчанию
     const now = new Date();
-    let defaultFilter = YEAR_FILTER_2025;
+    let defaultFilter = YEAR_FILTER_2025; // по умолчанию 2025
 
-    // Если сейчас 2026 год – пытаемся показать текущий месяц (если в нём есть турниры)
     if (now.getFullYear() === 2026) {
-      const currentMonth = now.getMonth() + 1; // январь = 1
+      const currentMonth = now.getMonth() + 1;
       const candidateFilter = `2026-${currentMonth}`;
-      // Проверяем, есть ли хотя бы один турнир в этом месяце
+      // Проверяем по tournaments (который сейчас содержит только 2026 год)
       if (tournaments.some(t => t.year === 2026 && t.month === currentMonth)) {
         defaultFilter = candidateFilter;
       } else {
-        // Если в текущем месяце турниров нет – ищем ближайший будущий месяц 2026 года
+        // Ищем ближайший будущий месяц
         for (let m = currentMonth + 1; m <= 12; m++) {
           if (tournaments.some(t => t.year === 2026 && t.month === m)) {
             defaultFilter = `2026-${m}`;
             break;
           }
         }
-        // Если ничего не нашли, оставляем 2025 (или можно оставить '2025-all')
+        // Если ничего не нашли, остаётся 2025-all
       }
     }
 
