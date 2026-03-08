@@ -1730,7 +1730,7 @@ window.tournaments = [
 },
 {
     id: 111,
-    name: "Territoriya Chess (классика)",
+    name: "Территория шахмат (классика)",
     location: "",
     date: "31 марта - 4 апреля",
     format: "Классика 8 туров (50+10)",
