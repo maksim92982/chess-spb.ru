@@ -1,4 +1,3 @@
-javascript
 window.tournaments2026 = [
     // ЯНВАРЬСКИЕ ТУРНИРЫ 2026
 
