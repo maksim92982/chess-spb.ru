@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y"></script>
-<script src="tournaments-2026.js?v=20260308"></script>
+    <!-- Google tag (gtag.js) — лениво после загрузки страницы -->
     <script>
       if (!window.__dbg) window.__dbg = function () {};
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-9JSBLLR18Y');
+      function gtag(){ window.dataLayer.push(arguments); }
+
+      window.addEventListener('load', function () {
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-9JSBLLR18Y';
+        script.async = true;
+        document.head.appendChild(script);
+
+        gtag('js', new Date());
+        gtag('config', 'G-9JSBLLR18Y');
+      });
     </script>
+    <!-- Турниры 2026 — не блокируем парсер -->
+    <script src="tournaments-2026.js?v=20260308" defer></script>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,13 +75,9 @@
     <link rel="canonical" href="https://chess-spb.ru/">
     
     <!-- Mobile optimization -->
-    <meta name="theme-color" content="#2c3e50">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <meta name="theme-color" content="#2c3e50">
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Schema.org разметка -->
     <script type="application/ld+json">
@@ -807,16 +811,27 @@ document.addEventListener('DOMContentLoaded', () => {
     <a href="/#2026-2">Турниры февраль 2026 СПб</a>
     <a href="/#2026-3">Турниры март 2026 СПб</a>
 </div>
-<!-- Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter — лениво после load -->
 <script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106944189', 'ym');
+    window.addEventListener('load', function () {
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106944189', 'ym');
 
-    ym(106944189, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+        ym(106944189, 'init', {
+            ssr: true,
+            webvisor: true,
+            clickmap: true,
+            ecommerce: 'dataLayer',
+            referrer: document.referrer,
+            url: location.href,
+            accurateTrackBounce: true,
+            trackLinks: true
+        });
+    });
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/106944189" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
