@@ -34,11 +34,11 @@
   
   <!-- Турниры 2026 года (Май) -->
   <url>
-    <loc>https://chess-spb.ru/#2026-5</loc>
-    <lastmod>2026-04-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
+  <loc>https://chess-spb.ru/#2026-5</loc>
+  <lastmod>2026-04-28</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.9</priority>
+</url>
   
   <!-- Рапид -->
   <url>
